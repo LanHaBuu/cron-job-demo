@@ -6,7 +6,7 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/news");
+        const response = await fetch("https://cron-job-demo.vercel.app/api/news");
         const result = await response.json();
         setNews(result);
       } catch (error) {
