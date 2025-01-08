@@ -17,11 +17,16 @@ export default function Home() {
     fetchData();
   },[]);
 
-  
   return (
     <div>
-      <p>{news?.id}</p>
-      <p>{news?.title}</p>
+      {news?.map((item:any) => {
+        return (
+          <div>
+            <p>{item?.id}</p>
+            <p>{item?.name}</p>
+          </div>
+        )
+      })}
     </div>
   );
 }

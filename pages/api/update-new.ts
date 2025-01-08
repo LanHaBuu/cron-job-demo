@@ -8,7 +8,10 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   try {
-    const data = await axios.get(`https://677ea6ca94bde1c1252ce5eb.mockapi.io/user`)
+    const data = await axios.patch(`https://677ea6ca94bde1c1252ce5eb.mockapi.io/user/1`, {
+        name:'cron job'
+    }
+    )
     res.setHeader("Cache-Control", "no-store");
     return res.status(200).send(data.data);
   } catch (err) {
