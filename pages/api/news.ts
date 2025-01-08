@@ -1,8 +1,8 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+
 import type { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
 
-let currentId = 1;
+let currentId = 3;
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,7 +13,8 @@ export default async function handler(
     currentId = currentId >= 20 ? 1 : currentId + 1;
     res.setHeader("Cache-Control", "no-store");
     return res.status(200).send(data.data);
-  } catch (error) {
+  } catch (err) {
+    console.error("Error fetching data:", err);
     return res.status(400).send({});
   }
 }
