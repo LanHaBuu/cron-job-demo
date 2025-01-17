@@ -1,0 +1,44 @@
+@import 'normalize.css';
+
+
+
+body {
+  /* margin: 0; */
+  font-family: "Alegreya Sans", sans-serif;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+
+/* for third party libraries */
+.tippy-box[data-theme~="voyage"] {
+  background-color: #15793b;
+  border-radius: 10px;
+  padding: 0;
+  margin: 0;
+}
+
+.tippy-arrow::before {
+  color: #15793b;
+}
+
+.ReactModal__Overlay.ReactModal__Overlay--after-open {
+  background-color: #7d7c7cbf !important;
+}
