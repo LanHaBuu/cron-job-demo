@@ -1,4 +1,4 @@
-import { devices, themes } from "@/config";
+import { devices, position, themes } from "@/config";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Flex from "../commonStyled/Flex";
@@ -27,7 +27,7 @@ const StyledHeader = styled.header`
 
 const Navbar = styled.nav`
   width: 100%;
-  height: 85px;
+  height: ${position.heightHeader};
 
   @media ${devices.mobileM} {
     max-width: 540px;
@@ -149,7 +149,7 @@ const Button = styled.div`
   font-weight: 700;
   font-size: 20px;
   border-radius: 10px;
-  background-color: #03c1ff;
+  background-color: ${themes.main};
   color: #fff;
   width: 110px;
   height: 40px;
@@ -222,11 +222,11 @@ const Header = () => {
 
             <MenuItem
               onClick={() => {
-                push("/image");
+                push("/community");
                 window.scrollTo(0, 0);
               }}
             >
-              <Text>Image</Text>
+              <Text>Community</Text>
             </MenuItem>
 
             <MenuItem
@@ -303,11 +303,11 @@ const Header = () => {
         <MbMenuItem>
           <MbMenuText
             onClick={() => {
-              push("/image");
+              push("/community");
               setShowMenuMb(false);
             }}
           >
-            Image
+            Community
           </MbMenuText>
         </MbMenuItem>
 

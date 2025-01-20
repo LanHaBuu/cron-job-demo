@@ -132,7 +132,7 @@ const Footer = () => {
   return (
     <StyledFooter>
       <Overlay />
-      <VideoBackground
+      {/* <VideoBackground
         autoPlay
         muted
         loop
@@ -146,7 +146,7 @@ const Footer = () => {
           src="/videos/footers.mp4"
           type="video/webm"
         />
-      </VideoBackground>
+      </VideoBackground> */}
 
       <FooterInner>
         <FooterContent>

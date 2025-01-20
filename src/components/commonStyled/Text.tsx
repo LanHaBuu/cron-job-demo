@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { space, typography, layout } from "styled-system";
 import { TextProps } from "./type";
+import { themes } from "@/config";
 
 const getFontSize = ({ fontSize, small }: TextProps) => {
   return small ? "14px" : fontSize || "16px";
@@ -24,7 +25,7 @@ const Text = styled.div<TextProps>`
 `;
 
 Text.defaultProps = {
-  color: "text",
+  color: themes.main,
   small: false,
   ellipsis: false,
 };

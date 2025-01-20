@@ -54,3 +54,4 @@ export const links = {
   telegram: 'https://t.me/aicatsuichannel',
   twitter: 'https://x.com/cataiagent',
 }
+
