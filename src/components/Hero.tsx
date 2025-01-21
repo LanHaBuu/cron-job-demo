@@ -424,7 +424,12 @@ const Hero: FC<HeroProps> = () => {
           </CardWrap>
 
           <BottomDesc>
-            <Desc>
+            <Desc
+              style={{
+                lineHeight: '1.4',
+                letterSpacing: '1.3',
+              }}
+            >
               As a big fan of SUIAI and aim to create a platform that simplifies
               crypto for both beginners and experienced users. The platform will
               help users check token information, track dev wallets, and

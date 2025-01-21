@@ -155,7 +155,8 @@ const Footer = () => {
             src={gameRobotImg}
           />
           <Text color="#868686">
-            Get involved, share your ideas, and help us grow!
+            Join us, share your thoughts, and be part of our journey to grow
+            together!
           </Text>
           <Socials
             data-aos-once="true"
