@@ -10,7 +10,23 @@ import {
   Pixelify_Sans,
   Jersey_10,
   Jersey_15,
+  Telex,
+  Open_Sans,
 } from 'next/font/google'
+
+export const openSans = Open_Sans({
+  weight: ['400', '300', '500', '600', '700', '800'],
+  style: ['normal'],
+  subsets: ['latin'],
+  display: 'swap',
+})
+
+export const telex = Telex({
+  weight: ['400'],
+  style: ['normal'],
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 export const pixel = Jersey_15({
   weight: ['400'],

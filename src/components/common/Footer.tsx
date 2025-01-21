@@ -9,6 +9,10 @@ import 'tippy.js/dist/tippy.css'
 import { links } from '@/config/constant'
 import Flex from '../commonStyled/Flex'
 import Text from '../commonStyled/Text'
+import { openSans } from '@/fonts'
+import Image from 'next/image'
+import gameRobotImg from '@/public/robot-game.webp'
+import { bounce } from '../commonStyled/animation'
 
 const StyledFooter = styled(Box)`
   width: 100%;
@@ -19,6 +23,7 @@ const StyledFooter = styled(Box)`
   justify-content: center;
   position: relative;
   min-height: 500px;
+  background-color: #e5e5e5;
 
   @media ${devices.tablet} {
     padding-top: 120px;
@@ -128,40 +133,38 @@ const IconWrap = styled(Link)`
   }
 `
 
+const RobotImg = styled(Image)`
+  width: 150px;
+  height: 150px;
+  animation: ${bounce} 1.5s infinite ease-in-out;
+`
+
 const Footer = () => {
   return (
-    <StyledFooter>
-      <Overlay />
-      {/* <VideoBackground
-        autoPlay
-        muted
-        loop
-        playsInline
-      >
-        <source
-          src="/videos/footers.mp4"
-          type="video/mp4"
-        />
-        <source
-          src="/videos/footers.mp4"
-          type="video/webm"
-        />
-      </VideoBackground> */}
-
+    <StyledFooter className={openSans.className}>
       <FooterInner>
         <FooterContent>
           <Text
-            color="#fff"
-            fontSize="30px"
+            fontSize="40px"
+            fontWeight={500}
+            textAlign="center"
           >
             Join Our Community
           </Text>
-          <Text color="#fff">
-            Get involved, share your ideas, and help us grow!
+          <RobotImg
+            alt="gaming"
+            src={gameRobotImg}
+          />
+          <Text
+            color="#868686"
+            textAlign="center"
+          >
+            Join us, share your thoughts, and be part of our journey to grow
+            together!
           </Text>
           <Socials
             data-aos-once="true"
-            data-aos="fade-left"
+            data-aos="fade-up"
           >
             <SocialsInner>
               <IconWrap
@@ -188,7 +191,7 @@ const Footer = () => {
             </SocialsInner>
           </Socials>
 
-          <Text color="#fff">© 2025 AICAT. All Rights Reserved.</Text>
+          <Text color="#868686">© 2025 AILENS. All Rights Reserved.</Text>
         </FooterContent>
       </FooterInner>
     </StyledFooter>

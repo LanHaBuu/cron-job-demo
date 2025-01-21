@@ -13,10 +13,12 @@ const VideoBackground = styled.video`
 `
 
 const BackgroundContainer = styled.div`
-  position: relative;
+  position: absolute;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
+  top: 0;
+  bottom: 0;
 `
 
 const Overlay = styled(Flex)`
@@ -25,13 +27,12 @@ const Overlay = styled(Flex)`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #00000063;
 `
 
 const Background = () => {
   return (
     <BackgroundContainer>
-      <Overlay />
+      {/* <Overlay /> */}
       <VideoBackground
         autoPlay
         muted
@@ -39,17 +40,14 @@ const Background = () => {
         playsInline
       >
         <source
-          src="/videos/heros.mp4"
+          src="/videos/hero.mp4"
           type="video/mp4"
         />
         <source
-          src="/videos/heros.mp4"
+          src="/videos/hero.mp4"
           type="video/webm"
         />
-        {/* Additional sources can be added for compatibility */}
-        Your browser does not support the video tag.
       </VideoBackground>
-      {/* Place any other content you want on top of the video here */}
     </BackgroundContainer>
   )
 }

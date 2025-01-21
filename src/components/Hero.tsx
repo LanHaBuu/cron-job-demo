@@ -1,38 +1,43 @@
-import { devices, themes } from "@/config";
-import React, { FC, useCallback, useRef, useState } from "react";
-import styled from "styled-components";
-import { pixel } from "@/fonts";
-import Background from "./Background/CustomBg";
-import Image from "next/image";
-import headerImg from "@/public/header.webp";
-import { HeroContent } from "@/config/constant";
-import { useRouter } from "next/router";
-import { ToastContainer, toast } from "react-toastify";
-import { isAddress } from "./utils";
+import { devices, themes } from '@/config'
+import React, { FC, useCallback, useRef, useState } from 'react'
+import styled, { keyframes } from 'styled-components'
+import { openSans } from '@/fonts'
+import Background from './Background/CustomBg'
+import SearchIcon from '@mui/icons-material/Search'
+import Image from 'next/image'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import suiAiImg from '@/public/suai_logo.png'
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown'
+import { useRouter } from 'next/router'
+import { ToastContainer, toast } from 'react-toastify'
+import Flex from './commonStyled/Flex'
+import Text from './commonStyled/Text'
+import { isAddress } from './utils'
+import Box from './commonStyled/Box'
 
 const StyledHero = styled.div`
-  height: max-content;
   position: relative;
-`;
+`
 
 const HeroWrapper = styled.div`
-  position: absolute;
+  position: relative;
   left: 0;
   right: 0;
   width: 100%;
   height: max-content;
   display: flex;
   justify-content: center;
-  top: 50px;
   z-index: 1;
-  @media ${devices.mobileL} {
-    top: 100px;
-  }
+  top: 90px;
 
-  @media ${devices.tablet} {
-    top: 150px;
+  padding-top: 40px;
+  padding-bottom: 80px;
+
+  @media ${devices.laptop} {
+    padding-top: 110px;
+    padding-bottom: 110px;
   }
-`;
+`
 
 const ContentInner = styled.div`
   display: flex;
@@ -42,46 +47,39 @@ const ContentInner = styled.div`
   padding: 0 10px;
   justify-content: center;
   align-items: center;
-`;
+  z-index: 1;
+`
 
 const BigTitle = styled.h1`
   margin: 0;
-  color: ${themes.main};
+  color: #000;
   font-weight: 700;
-  font-size: 70px;
+  font-size: 40px;
 
   @media ${devices.mobileM} {
-    font-size: 90px;
-  }
-
-  @media ${devices.tablet} {
-    font-size: 90px;
+    font-size: 50px;
   }
 
   @media ${devices.laptop} {
-    font-size: 150px;
+    font-size: 80px;
   }
-`;
+`
 
 const Desc = styled.h1`
   margin: 0;
-  color: ${themes.main};
-  font-weight: 700;
-  font-size: 40px;
+  color: #868686;
+  font-weight: 400;
+  font-size: 16px;
   text-align: center;
 
-  @media ${devices.mobileM} {
-    font-size: 50px;
-  }
-
   @media ${devices.tablet} {
-    font-size: 50px;
+    font-size: 20px;
   }
 
   @media ${devices.laptop} {
-    font-size: 50px;
+    font-size: 20px;
   }
-`;
+`
 
 const EmptyBox = styled.div`
   background: #000;
@@ -92,22 +90,13 @@ const EmptyBox = styled.div`
   display: block;
   opacity: 0.8;
   filter: blur(10px); /* Apply the blur effect */
-`;
-
-const HeroCatImg = styled(Image)`
-  width: 150px;
-  height: 150px;
-  @media ${devices.tablet} {
-    width: 300px;
-    height: 300px;
-  }
-`;
+`
 
 export const Themes = styled.div`
   background: rgba(0, 0, 0, 0.8);
   border-radius: 10px;
   box-shadow: 0 0 15px ${themes.main};
-`;
+`
 
 export const SearchBox = styled(Themes)`
   min-width: auto;
@@ -120,7 +109,7 @@ export const SearchBox = styled(Themes)`
   @media ${devices.mobileM} {
     min-width: 500px;
   }
-`;
+`
 
 export const InputSearch = styled.input`
   flex: 1;
@@ -136,14 +125,14 @@ export const InputSearch = styled.input`
   &::placeholder {
     color: #666;
   }
-`;
+`
 
 export const WrapperInput = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-`;
+`
 
 export const ButtonSearch = styled.button`
   padding: 10px 20px;
@@ -157,75 +146,323 @@ export const ButtonSearch = styled.button`
   transition: 0.3s ease;
 
   &:hover {
-    background: #00bfa5;
+    background: #216e05;
     box-shadow: 0 0 10px ${themes.main}, 0 0 20px ${themes.main};
   }
-`;
+`
+
+const Card = styled(Flex)`
+  background-color: #fff;
+  border: 1px solid #dedede;
+  border-radius: 10px;
+  padding: 10px;
+
+  max-width: 480px;
+  flex-direction: column;
+  cursor: pointer;
+  transition: 0.3s all;
+
+  &:hover {
+    transform: scale(1.03);
+  }
+
+  @media ${devices.laptop} {
+    padding: 16px;
+  }
+`
+
+const CardWrap = styled(Flex)`
+  gap: 20px;
+  margin-top: 20px;
+  flex-direction: column;
+
+  @media ${devices.laptop} {
+    flex-direction: row;
+  }
+`
+
+const Logo = styled(Image)`
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #ebe1e1;
+  border-radius: 10px;
+  height: 120px;
+  width: 120px;
+  min-width: max-content;
+`
+
+const SearchWrap = styled(Flex)`
+  border-radius: 20px;
+  padding: 10px 20px;
+  border: 1px solid #ebe1e1;
+  background-color: #f6f6f6;
+  width: 100%;
+  max-width: 600px;
+  padding-right: 10px;
+  margin-top: 15px;
+
+  @media ${devices.laptop} {
+    margin-top: 30px;
+  }
+`
+
+const Input = styled.input`
+  background-color: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  color: #868686;
+  font-size: 20px;
+  font-weight: 600;
+
+  &::placeholder {
+    color: #cdc7c7;
+    font-weight: 400;
+  }
+`
+
+const BottomDesc = styled(Flex)`
+  margin-top: 10px;
+  max-width: 800px;
+  @media ${devices.laptop} {
+    margin-top: 150px;
+  }
+`
+
+const bounce = keyframes`
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-8px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+`
+
+const BouncingFlex = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 40px;
+  cursor: pointer;
+`
+
+const BouncingText = styled(Text)`
+  font-size: 22px;
+  color: #868686;
+  animation: ${bounce} 1.5s infinite ease-in-out;
+`
+
+const BouncingIcon = styled(KeyboardDoubleArrowDownIcon)`
+  color: #4d4b4b;
+  animation: ${bounce} 1.5s infinite ease-in-out;
+`
+
+const IconWrap = styled(Box)`
+  transition: all 0.3s;
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.03);
+  }
+`
 
 interface HeroProps {}
 
 const Hero: FC<HeroProps> = () => {
-  const [searchAddress, setSearchAddress] = useState("");
-  const router = useRouter();
-  const searchRef = useRef<HTMLInputElement>(null);
+  const [searchAddress, setSearchAddress] = useState('')
+  const router = useRouter()
+  const searchRef = useRef<HTMLInputElement>(null)
 
   const handleKeyDown = (e: any) => {
-    if (e.key === "Enter" && searchAddress) {
-      handleSearch();
-    } else if (e.key === "Enter" && searchAddress === "") {
-      handleSearch();
+    if (e.key === 'Enter' && searchAddress) {
+      handleSearch()
+    } else if (e.key === 'Enter' && searchAddress === '') {
+      handleSearch()
     }
-  };
+  }
 
   const handleSearch = () => {
-    const address = searchAddress.trim();
+    const address = searchAddress.trim()
     if (isAddress(address)) {
-      router.push(`/community?address=${searchAddress}`);
-      setSearchAddress("");
-      searchRef.current?.blur();
+      router.push(`/community?address=${searchAddress}`)
+      setSearchAddress('')
+      searchRef.current?.blur()
     } else {
-      toast.error("Please enter the token address!");
+      toast.error('Please enter the token address!')
     }
-    if (searchAddress === "") {
-      searchRef.current?.blur();
+    if (searchAddress === '') {
+      searchRef.current?.blur()
     }
-  };
+  }
+
+  const { push } = useRouter()
 
   return (
     <StyledHero>
       <ToastContainer />
       <HeroWrapper>
-        <ContentInner className={pixel.className}>
-          <HeroCatImg alt='cat' src={headerImg} />
-          <BigTitle>{HeroContent.title}</BigTitle>
+        <ContentInner className={openSans.className}>
+          <BigTitle>AI LENS</BigTitle>
 
-          <SearchBox>
-            <WrapperInput>
-              <InputSearch
-                ref={searchRef}
-                type='text'
-                placeholder='Enter token address...'
-                value={searchAddress}
-                onChange={(e) => setSearchAddress(e.target.value)}
-                onKeyDown={handleKeyDown}
-                spellCheck={false}
+          <Desc>
+            Track tokens, monitor dev wallets, and discover hidden gems, all on
+            the SUIAI platform, powered by AI.
+          </Desc>
+
+          <SearchWrap>
+            <Input placeholder="Enter CA to see the magic..." />
+            <IconWrap>
+              <SearchIcon />
+            </IconWrap>
+          </SearchWrap>
+
+          <CardWrap>
+            <Card>
+              <Flex alignItems="center">
+                <Text
+                  color="#000"
+                  fontWeight={600}
+                  mr="5px"
+                  fontSize="20px"
+                >
+                  SUIAI
+                </Text>
+                <CheckCircleIcon
+                  fontSize="small"
+                  color="success"
+                />
+              </Flex>
+
+              <Text color="#868686">CA: 0xbc732bc...1f92::suai::SUAI</Text>
+
+              <Flex
+                mt="10px"
+                style={{
+                  gap: '10px',
+                }}
+              >
+                <Logo
+                  alt="logo"
+                  src={suiAiImg}
+                  width={120}
+                  height={120}
+                />
+
+                <Flex
+                  flexDirection="column"
+                  style={{
+                    gap: '8px',
+                  }}
+                >
+                  <Text color="#868686">
+                    Launch and Co-Create Onchain AI Agents @SuiNetwork
+                  </Text>
+
+                  <Flex>
+                    <Text mr="5px">Created By:</Text>
+                    <Text color="#868686">0xbc732bc...1f92</Text>
+                  </Flex>
+                  <Flex>
+                    <Text mr="5px"> Marketcap:</Text>
+                    <Text color="#868686">18.5M$</Text>
+                  </Flex>
+                </Flex>
+              </Flex>
+            </Card>
+
+            <Card>
+              <Flex alignItems="center">
+                <Text
+                  color="#000"
+                  fontWeight={600}
+                  mr="5px"
+                  fontSize="20px"
+                >
+                  SUIAI
+                </Text>
+                <CheckCircleIcon
+                  fontSize="small"
+                  color="success"
+                />
+              </Flex>
+
+              <Text color="#868686">CA: 0xbc732bc...1f92::suai::SUAI</Text>
+
+              <Flex
+                mt="10px"
+                style={{
+                  gap: '10px',
+                }}
+              >
+                <Logo
+                  alt="logo"
+                  src={suiAiImg}
+                />
+
+                <Flex
+                  flexDirection="column"
+                  style={{
+                    gap: '8px',
+                  }}
+                >
+                  <Text color="#868686">
+                    Launch and Co-Create Onchain AI Agents @SuiNetwork
+                  </Text>
+
+                  <Flex>
+                    <Text mr="5px">Created By:</Text>
+                    <Text color="#868686">0xbc732bc...1f92</Text>
+                  </Flex>
+                  <Flex>
+                    <Text mr="5px"> Marketcap:</Text>
+                    <Text color="#868686">18.5M$</Text>
+                  </Flex>
+                </Flex>
+              </Flex>
+            </Card>
+          </CardWrap>
+
+          <BottomDesc>
+            <Desc
+              style={{
+                lineHeight: '1.4',
+                letterSpacing: '1.3',
+              }}
+            >
+              As a big fan of SUIAI and aim to create a platform that simplifies
+              crypto for both beginners and experienced users. The platform will
+              help users check token information, track dev wallets, and
+              discover investment opportunities, providing valuable insights for
+              smarter decisions 💚
+            </Desc>
+          </BottomDesc>
+
+          <BouncingFlex
+            onClick={() => {
+              push('/#about')
+            }}
+          >
+            <BouncingText
+              mr="10px"
+              fontSize="22px"
+              color="#868686"
+            >
+              SCROLL DOWN
+            </BouncingText>
+            <BouncingIcon>
+              <KeyboardDoubleArrowDownIcon
+                style={{
+                  color: '#4d4b4b',
+                }}
               />
-            </WrapperInput>
-
-            <ButtonSearch onClick={handleSearch}>Search</ButtonSearch>
-          </SearchBox>
-
-          {HeroContent.desc?.map((_) => (
-            <Desc key={_}>{_}</Desc>
-          ))}
+            </BouncingIcon>
+          </BouncingFlex>
         </ContentInner>
+        <Background />
       </HeroWrapper>
-
-      <Background />
-
-      <EmptyBox />
     </StyledHero>
-  );
-};
+  )
+}
 
-export default Hero;
+export default Hero

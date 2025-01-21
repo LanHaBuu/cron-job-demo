@@ -1,15 +1,17 @@
-import { devices, position, themes } from "@/config";
-import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import Flex from "../commonStyled/Flex";
-import Box from "../commonStyled/Box";
-import { pixel, rowdies } from "@/fonts";
-import { links } from "@/config/constant";
-import HamburgerMenu from "../HamburgerMenu";
-import { useClickAway, useWindowSize } from "react-use";
-import { useRouter } from "next/router";
+import { devices, position, themes } from '@/config'
+import React, { useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
+import Flex from '../commonStyled/Flex'
+import Box from '../commonStyled/Box'
+import { openSans, pixel, rowdies, telex } from '@/fonts'
+import { links } from '@/config/constant'
+import HamburgerMenu from '../HamburgerMenu'
+import { useClickAway, useWindowSize } from 'react-use'
+import { useRouter } from 'next/router'
+import Image from 'next/image'
+import logoImg from '@/public/small-logo.png'
 
-const MB_MENU_HEIGHT = 250;
+const MB_MENU_HEIGHT = 250
 
 const StyledHeader = styled.header`
   position: fixed;
@@ -21,9 +23,10 @@ const StyledHeader = styled.header`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-
-  background-color: #0000008a;
-`;
+  background-color: #fff;
+  border-bottom: 5px solid #f7f7f7;
+  padding: 0 10px;
+`
 
 const Navbar = styled.nav`
   width: 100%;
@@ -45,14 +48,14 @@ const Navbar = styled.nav`
   @media ${devices.laptopL} {
     max-width: 1320px;
   }
-`;
+`
 
 const NavInner = styled(Flex)`
   height: 100%;
   width: 100%;
   align-items: center;
   justify-content: space-between;
-`;
+`
 
 const Menu = styled(Box)`
   display: none;
@@ -63,19 +66,18 @@ const Menu = styled(Box)`
     width: 100%;
     padding: 0 30px;
   }
-`;
+`
 
 const Text = styled.p`
-  margin: 0;
-  font-size: 30px;
+  font-size: 18px;
   font-weight: 700;
-  color: ${themes.main};
+  color: #000;
   text-transform: uppercase;
 
   @media ${devices.desktop} {
-    font-size: 18px;
+    font-size: 20px;
   }
-`;
+`
 
 const MenuItem = styled(Flex)`
   font-weight: 700;
@@ -88,15 +90,15 @@ const MenuItem = styled(Flex)`
 
   &:hover {
     & > ${Text} {
-      color: #fff;
+      color: #216e05;
       transition: color 0.5s ease;
     }
     & > svg {
-      fill: #fff;
+      fill: #216e05;
       transition: fill 0.5s ease;
     }
   }
-`;
+`
 
 const HamberMenu = styled(Flex)`
   align-items: center;
@@ -104,27 +106,28 @@ const HamberMenu = styled(Flex)`
   @media ${devices.laptop} {
     display: none;
   }
-`;
+`
 
 const MobileMenu = styled.div<{ show?: boolean; height: number }>`
   width: 100%;
   height: ${({ show, height }) => (show ? height : 0)}px;
-  background-color: #0000002d;
+  backdrop-filter: blur(30px);
+  background-color: #ffffffa6;
   transition: height 0.3s ease;
   overflow: hidden;
 
   @media ${devices.laptop} {
     display: none;
   }
-`;
+`
 
 const MbMenuText = styled(Flex)`
   margin: 0;
-  color: ${themes.main};
+  color: #000;
   font-weight: 700;
   font-size: 18px;
   text-decoration: none;
-`;
+`
 
 const MbMenuItem = styled.div`
   width: 100%;
@@ -135,21 +138,21 @@ const MbMenuItem = styled.div`
 
   &:hover {
     & > ${MbMenuText} {
-      color: ${themes.text};
+      color: #216e05;
       transition: color 0.5s ease;
     }
     & > svg {
-      fill: ${themes.text};
+      fill: #216e05;
       transition: fill 0.5s ease;
     }
   }
-`;
+`
 
 const Button = styled.div`
   font-weight: 700;
   font-size: 20px;
   border-radius: 10px;
-  background-color: ${themes.main};
+  background-color: #000;
   color: #fff;
   width: 110px;
   height: 40px;
@@ -170,68 +173,79 @@ const Button = styled.div`
     height: 50px;
     font-size: 20px;
   }
-`;
+`
+
+const Logo = styled(Image)`
+  width: 70px;
+  height: auto;
+  cursor: pointer;
+`
 
 const Header = () => {
-  const [showMenuMb, setShowMenuMb] = useState(false);
-  const [mbMenuHeigh, setMbMenuHeigh] = useState(MB_MENU_HEIGHT);
+  const [showMenuMb, setShowMenuMb] = useState(false)
+  const [mbMenuHeigh, setMbMenuHeigh] = useState(MB_MENU_HEIGHT)
 
-  const { width } = useWindowSize();
+  const { width } = useWindowSize()
 
   useEffect(() => {
     if (width > 992) {
-      setMbMenuHeigh(MB_MENU_HEIGHT);
-      setShowMenuMb(false);
+      setMbMenuHeigh(MB_MENU_HEIGHT)
+      setShowMenuMb(false)
     }
-  }, [width]);
+  }, [width])
 
-  const headerRef = useRef(null);
+  const headerRef = useRef(null)
 
   useClickAway(headerRef, () => {
-    setShowMenuMb(false);
-  });
+    setShowMenuMb(false)
+  })
 
-  const { push } = useRouter();
+  const { push } = useRouter()
 
   return (
-    <StyledHeader ref={headerRef} suppressHydrationWarning>
+    <StyledHeader
+      ref={headerRef}
+      suppressHydrationWarning
+    >
       <Navbar>
         <NavInner>
-          <Menu className={pixel.className}>
+          <Box
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' })
+              push('/')
+            }}
+          >
+            <Logo
+              src={logoImg}
+              alt="logo"
+            />
+          </Box>
+          <Menu className={openSans.className}>
             <MenuItem
               onClick={() => {
-                push("/#about");
+                push('/#about')
               }}
             >
-              <Text>About</Text>
+              <Text>Lens</Text>
             </MenuItem>
             <MenuItem
               onClick={() => {
-                push("/#howtobuy");
+                push('/#features')
               }}
             >
-              <Text>How to buy</Text>
+              <Text>Features</Text>
             </MenuItem>
             <MenuItem
               onClick={() => {
-                push("/#why");
+                push('/#roadmap')
               }}
             >
-              <Text>Mission</Text>
+              <Text>Roadmap</Text>
             </MenuItem>
 
             <MenuItem
               onClick={() => {
-                push("/community");
-                window.scrollTo(0, 0);
-              }}
-            >
-              <Text>Community</Text>
-            </MenuItem>
-
-            <MenuItem
-              onClick={() => {
-                window.open(links.telegram);
+                window.open(links.telegram)
               }}
             >
               <Text>Telegram</Text>
@@ -239,7 +253,7 @@ const Header = () => {
 
             <MenuItem
               onClick={() => {
-                window.open(links.twitter);
+                window.open(links.twitter)
               }}
             >
               <Text>Twitter</Text>
@@ -249,15 +263,20 @@ const Header = () => {
           <Flex>
             <Button
               onClick={() =>
-                window.open(
-                  "https://suiai.fun/pool/0x4b1c21a50c9c62c30d80592082f0997c815017de8b84168e2fddb748076eec63"
-                )
+                window
+                  .open
+                  // 'https://suiai.fun/pool/0x4b1c21a50c9c62c30d80592082f0997c815017de8b84168e2fddb748076eec63'
+                  ()
               }
             >
-              BUY $AICAT
+              BUY $LENS
             </Button>
+
             <HamberMenu>
-              <HamburgerMenu open={showMenuMb} setOpen={setShowMenuMb} />
+              <HamburgerMenu
+                open={showMenuMb}
+                setOpen={setShowMenuMb}
+              />
             </HamberMenu>
           </Flex>
         </NavInner>
@@ -266,56 +285,45 @@ const Header = () => {
       <MobileMenu
         show={showMenuMb ? showMenuMb : undefined}
         height={mbMenuHeigh}
-        className={rowdies.className}
+        className={openSans.className}
       >
         <MbMenuItem>
           <MbMenuText
             onClick={() => {
-              push("/#about");
-              setShowMenuMb(false);
+              push('/#about')
+              setShowMenuMb(false)
             }}
           >
-            About
+            Lens
           </MbMenuText>
         </MbMenuItem>
 
         <MbMenuItem>
           <MbMenuText
             onClick={() => {
-              push("/#howtobuy");
-              setShowMenuMb(false);
+              push('/#howtobuy')
+              setShowMenuMb(false)
             }}
           >
-            How to buy
+            Features
           </MbMenuText>
         </MbMenuItem>
         <MbMenuItem>
           <MbMenuText
             onClick={() => {
-              push("/#why");
-              setShowMenuMb(false);
+              push('/#why')
+              setShowMenuMb(false)
             }}
           >
-            Mission
-          </MbMenuText>
-        </MbMenuItem>
-
-        <MbMenuItem>
-          <MbMenuText
-            onClick={() => {
-              push("/community");
-              setShowMenuMb(false);
-            }}
-          >
-            Community
+            Roadmap
           </MbMenuText>
         </MbMenuItem>
 
         <MbMenuItem>
           <MbMenuText
             onClick={() => {
-              window.open(links.telegram);
-              setShowMenuMb(false);
+              window.open(links.telegram)
+              setShowMenuMb(false)
             }}
           >
             Telegram
@@ -325,8 +333,8 @@ const Header = () => {
         <MbMenuItem>
           <MbMenuText
             onClick={() => {
-              window.open(links.twitter);
-              setShowMenuMb(false);
+              window.open(links.twitter)
+              setShowMenuMb(false)
             }}
           >
             Twitter
@@ -334,7 +342,7 @@ const Header = () => {
         </MbMenuItem>
       </MobileMenu>
     </StyledHeader>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

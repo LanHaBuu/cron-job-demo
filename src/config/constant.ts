@@ -7,7 +7,7 @@ export const HeroContent = {
 }
 
 export const AboutContent = {
-  title: 'About AICAT',
+  title: 'What is AI LENS',
   desc: [
     'AICAT is more than just a meme token — it represents unity and the power of community within the SUI ecosystem. We place the community at the heart of every decision and developmental direction.',
 
@@ -20,24 +20,30 @@ export const AboutContent = {
 }
 
 export const HowToByContent = {
-  title: 'how to buy $AICAT',
+  title: 'Features',
   desc: [
-    {
-      guideTitle: 'Create wallet',
-      guideDesc: `Download the Sui wallet or your preferred wallet for free on the App Store or Google Play. For desktop, get the Sui Chrome extension at sui.org.`,
-    },
-    {
-      guideTitle: 'Gather Funds',
-      guideDesc: `Transfer your SUI to SUI Network.`,
-    },
-    {
-      guideTitle: 'Go to SuiAi',
-      guideDesc: `Navigate to SuiAi and connect your wallet.`,
-    },
-    {
-      guideTitle: 'Buy $AICAT token',
-      guideDesc: `Swap SUI or SUIAI to AICAT.`,
-    },
+    // {
+    //   guideTitle: 'Create wallet',
+    //   guideDesc: `Download the Sui wallet or your preferred wallet for free on the App Store or Google Play. For desktop, get the Sui Chrome extension at sui.org.`,
+    // },
+    // {
+    //   guideTitle: 'Gather Funds',
+    //   guideDesc: `Transfer your SUI to SUI Network.`,
+    // },
+    // {
+    //   guideTitle: 'Go to SuiAi',
+    //   guideDesc: `Navigate to SuiAi and connect your wallet.`,
+    // },
+    // {
+    //   guideTitle: 'Buy $AICAT token',
+    //   guideDesc: `Swap SUI or SUIAI to AICAT.`,
+    // },
+
+    'Discover and monitor all tokens on SUI AI',
+    'Track detailed token analytics and insights',
+    'Follow key developer wallets and their activity',
+    'Analyze and monitor real-time dev wallet transactions',
+    'Filter dev wallet activities to focus on token-specific interactions',
   ],
 }
 
@@ -54,4 +60,3 @@ export const links = {
   telegram: 'https://t.me/aicatsuichannel',
   twitter: 'https://x.com/cataiagent',
 }
-
