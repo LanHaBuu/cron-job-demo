@@ -1,21 +1,25 @@
 import { devices, themes } from '@/config'
 import React from 'react'
-import styled from 'styled-components'
-import mechanicCatImg from '@/public/mechanic-cat.webp'
-import mechanicCatLeftImg from '@/public/mechanic-cat-left.webp'
-import headerImg from '@/public/favicon.webp'
+import styled, { keyframes } from 'styled-components'
+import earthImg from '@/public/earth.webp'
+import featureImg from '@/public/feature.webp'
+import skateRobotImg from '@/public/skate-robot.png'
+
 import Image from 'next/image'
-import { pixel } from '@/fonts'
+import { openSans, pixel } from '@/fonts'
 import Flex from './commonStyled/Flex'
 import { AboutContent, HowToByContent } from '@/config/constant'
+import Roadmap from './RoadMap'
+import { bounce, spin } from './commonStyled/animation'
+
 const Container = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
-  margin-top: -4px;
   position: relative;
   padding-bottom: 60px;
+  background-color: #eeeeee;
 `
 
 const VideoBackground = styled.video`
@@ -59,7 +63,7 @@ const Content = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
-
+  gap: 50px;
   flex-direction: column;
   padding-top: 120px;
   margin-top: -60px;
@@ -91,7 +95,7 @@ export const AboutWrap = styled.div`
   @media ${devices.tablet} {
     height: 100%;
     justify-content: space-around;
-    flex: 6;
+    flex: 5;
     align-items: flex-start;
     padding: 40px 0;
   }
@@ -106,7 +110,7 @@ export const ImgWithEggWrap = styled.div`
 
   @media ${devices.tablet} {
     align-items: flex-start;
-    flex: 4;
+    flex: 5;
     margin-top: 0;
   }
 `
@@ -118,6 +122,8 @@ export const LongEggImg = styled(Image)`
   @media ${devices.tablet} {
     max-width: unset;
   }
+
+  animation: ${spin} 20s infinite ease;
 `
 
 const BigTitle = styled.p`
@@ -138,24 +144,19 @@ const StepBigtitle = styled(BigTitle)`
   }
 `
 
-export const Desc = styled.p`
+const Desc = styled.h1`
   margin: 0;
+  color: #868686;
   font-weight: 400;
+  font-size: 16px;
   text-align: center;
-  color: ${themes.main};
-  font-size: 18px;
 
-  @media ${devices.mobileM} {
+  @media ${devices.tablet} {
     font-size: 20px;
   }
 
-  @media ${devices.tablet} {
-    font-size: 22px;
-    text-align: left;
-  }
-
-  @media ${devices.laptopL} {
-    font-size: 26px;
+  @media ${devices.laptop} {
+    font-size: 20px;
   }
 `
 
@@ -172,7 +173,7 @@ const BottomContent = styled(Content)`
 `
 const LongWithChartImg = styled(Image)`
   width: 100%;
-  max-width: 550px;
+  max-width: 650px;
   height: auto;
 `
 
@@ -314,43 +315,41 @@ const Overlay = styled(Flex)`
   background-color: #000000bb;
 `
 
+const RoadmadWrap = styled(Flex)`
+  padding-top: 100px;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`
+
+const RobotImg = styled(Image)`
+  width: 150px;
+  height: 150px;
+  animation: ${bounce} 1.5s infinite ease-in-out;
+`
+
 const Introduce = () => {
   return (
-    <Container className={pixel.className}>
-      <Overlay />
-      <VideoBackground
-        autoPlay
-        muted
-        loop
-        playsInline
-      >
-        <source
-          src="/videos/introduces.mp4"
-          type="video/mp4"
-        />
-        <source
-          src="/videos/introduces.mp4"
-          type="video/webm"
-        />
-      </VideoBackground>
+    <Container className={openSans.className}>
       <StyledIntroduce>
         <Content id="about">
           <ImgWithEggWrap
             data-aos-once="true"
-            data-aos="fade-left"
+            data-aos="zoom-in"
           >
             <LongEggImg
-              src={mechanicCatLeftImg}
-              alt="mechanicCatImg"
+              src={earthImg}
+              alt="earthImg"
             />
           </ImgWithEggWrap>
-          <AboutWrap
-            data-aos-once="true"
-            data-aos="fade-right"
-          >
-            <BigTitle className={pixel.className}>
+
+          <AboutWrap data-aos-once="true">
+            <BigTitle className={openSans.className}>
               {AboutContent.title}
             </BigTitle>
+
             {AboutContent?.desc?.map((desc, index) => {
               return (
                 <AboutContentWrapper key={index}>
@@ -361,49 +360,55 @@ const Introduce = () => {
           </AboutWrap>
         </Content>
 
-        <BottomContent id="howtobuy">
+        <BottomContent id="features">
           <ContentItem
             data-aos-once="true"
             data-aos="fade-left"
           >
-            <StepBigtitle className={pixel.className}>
+            <StepBigtitle className={openSans.className}>
               {HowToByContent.title}
             </StepBigtitle>
 
-            {HowToByContent.desc?.map((item, index) => {
+            {HowToByContent?.desc?.map((desc, index) => {
               return (
-                <GuideStep
-                  data-aos-once="true"
-                  data-aos="fade-left"
-                  key={item.guideDesc}
-                >
-                  <StepImg
-                    src={headerImg}
-                    alt="guid_wallet"
-                  />
-                  <GuideContent>
-                    <GuideTitle className={pixel.className}>
-                      {item.guideTitle}
-                    </GuideTitle>
-
-                    <GuideDesc className={pixel.className}>
-                      {item.guideDesc}
-                    </GuideDesc>
-                  </GuideContent>
-                </GuideStep>
+                <AboutContentWrapper key={index}>
+                  <Desc>{desc}</Desc>
+                </AboutContentWrapper>
               )
             })}
           </ContentItem>
           <ContentItem
             data-aos-once="true"
-            data-aos="fade-right"
+            data-aos="zoom-in"
           >
             <LongWithChartImg
-              src={mechanicCatImg}
-              alt="chart"
+              src={featureImg}
+              alt="featureImg"
             />
           </ContentItem>
         </BottomContent>
+
+        <RoadmadWrap id="roadmap">
+          <Flex
+            padding="40px 0"
+            flexDirection="column"
+            alignItems="center"
+          >
+            <BigTitle className={openSans.className}>Roadmap</BigTitle>
+
+            <Flex
+              flexDirection="column"
+              alignItems="center"
+            >
+              <RobotImg
+                src={skateRobotImg}
+                alt="skateRobotImg"
+              />
+              <Desc>From A big fan of SUI AI 💚</Desc>
+            </Flex>
+          </Flex>
+          <Roadmap />
+        </RoadmadWrap>
       </StyledIntroduce>
     </Container>
   )

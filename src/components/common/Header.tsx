@@ -8,6 +8,8 @@ import { links } from '@/config/constant'
 import HamburgerMenu from '../HamburgerMenu'
 import { useClickAway, useWindowSize } from 'react-use'
 import { useRouter } from 'next/router'
+import Image from 'next/image'
+import logoImg from '@/public/small-logo.png'
 
 const MB_MENU_HEIGHT = 250
 
@@ -173,6 +175,12 @@ const Button = styled.div`
   }
 `
 
+const Logo = styled(Image)`
+  width: 70px;
+  height: auto;
+  cursor: pointer;
+`
+
 const Header = () => {
   const [showMenuMb, setShowMenuMb] = useState(false)
   const [mbMenuHeigh, setMbMenuHeigh] = useState(MB_MENU_HEIGHT)
@@ -201,37 +209,38 @@ const Header = () => {
     >
       <Navbar>
         <NavInner>
-          <Box>Icon</Box>
+          <Box
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' })
+              push('/')
+            }}
+          >
+            <Logo
+              src={logoImg}
+              alt="logo"
+            />
+          </Box>
           <Menu className={openSans.className}>
             <MenuItem
               onClick={() => {
                 push('/#about')
               }}
             >
-              <Text>About</Text>
+              <Text>Lens</Text>
             </MenuItem>
             <MenuItem
               onClick={() => {
-                push('/#howtobuy')
+                push('/#features')
               }}
             >
-              <Text>How to buy</Text>
+              <Text>Features</Text>
             </MenuItem>
             <MenuItem
               onClick={() => {
-                push('/#why')
+                push('/#roadmap')
               }}
             >
-              <Text>Mission</Text>
-            </MenuItem>
-
-            <MenuItem
-              onClick={() => {
-                push('/community')
-                window.scrollTo(0, 0)
-              }}
-            >
-              <Text>Community</Text>
+              <Text>Roadmap</Text>
             </MenuItem>
 
             <MenuItem
@@ -254,13 +263,15 @@ const Header = () => {
           <Flex>
             <Button
               onClick={() =>
-                window.open(
-                  'https://suiai.fun/pool/0x4b1c21a50c9c62c30d80592082f0997c815017de8b84168e2fddb748076eec63'
-                )
+                window
+                  .open
+                  // 'https://suiai.fun/pool/0x4b1c21a50c9c62c30d80592082f0997c815017de8b84168e2fddb748076eec63'
+                  ()
               }
             >
-              BUY $AICAT
+              BUY $LENS
             </Button>
+
             <HamberMenu>
               <HamburgerMenu
                 open={showMenuMb}
@@ -274,7 +285,7 @@ const Header = () => {
       <MobileMenu
         show={showMenuMb ? showMenuMb : undefined}
         height={mbMenuHeigh}
-        className={rowdies.className}
+        className={openSans.className}
       >
         <MbMenuItem>
           <MbMenuText
@@ -283,7 +294,7 @@ const Header = () => {
               setShowMenuMb(false)
             }}
           >
-            About
+            Lens
           </MbMenuText>
         </MbMenuItem>
 
@@ -294,7 +305,7 @@ const Header = () => {
               setShowMenuMb(false)
             }}
           >
-            How to buy
+            Features
           </MbMenuText>
         </MbMenuItem>
         <MbMenuItem>
@@ -304,18 +315,7 @@ const Header = () => {
               setShowMenuMb(false)
             }}
           >
-            Mission
-          </MbMenuText>
-        </MbMenuItem>
-
-        <MbMenuItem>
-          <MbMenuText
-            onClick={() => {
-              push('/community')
-              setShowMenuMb(false)
-            }}
-          >
-            Community
+            Roadmap
           </MbMenuText>
         </MbMenuItem>
 

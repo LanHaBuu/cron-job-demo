@@ -1,16 +1,23 @@
 import { devices, themes } from '@/config'
 import React from 'react'
 import styled from 'styled-components'
-import { pixel, ruluko } from '@/fonts'
-import { AboutWrap, Desc, ImgWithEggWrap, LongEggImg } from './Introduce'
+import { openSans, pixel, ruluko } from '@/fonts'
+import { AboutWrap, ImgWithEggWrap, LongEggImg } from './Introduce'
 import WhyImg from '@/public/why.webp'
 import { WhyContent } from '@/config/constant'
+import Flex from './commonStyled/Flex'
+import Text from './commonStyled/Text'
+import Image from 'next/image'
+import chartImg from '@/public/tradingchart.png'
+import robot from '@/public/logo.png'
+import { bounce } from './commonStyled/animation'
+
 const Container = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
-  margin-top: -4px;
+  background-color: #eeeeee;
   position: relative;
   padding-bottom: 60px;
 `
@@ -62,10 +69,21 @@ const Content = styled.div`
   }
 `
 
-const Flex = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
+const Desc = styled.h1`
+  margin: 0;
+  color: #868686;
+  font-weight: 400;
+  font-size: 16px;
+  text-align: center;
+  margin-top: 10px;
+
+  @media ${devices.tablet} {
+    font-size: 20px;
+  }
+
+  @media ${devices.laptop} {
+    font-size: 20px;
+  }
 `
 
 const VideoBackground = styled.video`
@@ -86,60 +104,65 @@ const Overlay = styled(Flex)`
   background-color: #000000bb;
 `
 
-const StepBigtitle = styled(BigTitle)`
-  @media ${devices.mobileL} {
-    margin-bottom: 18px;
-  }
+const ChartWrap = styled(Flex)`
+  border-radius: 20px;
+  overflow: hidden;
+`
+
+const ChartImg = styled(Image)`
+  width: 100%;
+  height: auto;
+`
+
+const RobotImg = styled(Image)`
+  width: 150px;
+  height: 150px;
+  animation: ${bounce} 1.5s infinite ease-in-out;
 `
 
 const TokenOmics = () => {
   return (
     <Container
       id="why"
-      className={ruluko.className}
+      className={openSans.className}
       suppressHydrationWarning
     >
-      <Overlay />
-      <VideoBackground
-        autoPlay
-        muted
-        loop
-        playsInline
-      >
-        <source
-          src="/videos/footers.mp4"
-          type="video/mp4"
-        />
-        <source
-          src="/videos/footers.mp4"
-          type="video/webm"
-        />
-      </VideoBackground>
       <StyledTokenOmics>
-        <Content>
-          <ImgWithEggWrap
-            data-aos-once="true"
-            data-aos="fade-left"
+        <Flex
+          width="100%"
+          justifyContent="center"
+          flexDirection="column"
+          alignItems="center"
+        >
+          <Flex
+            padding="40px 0"
+            flexDirection="column"
+            alignItems="center"
           >
-            <LongEggImg
-              src={WhyImg}
-              alt="mechanicCatImg"
-            />
-          </ImgWithEggWrap>
-          <AboutWrap
-            data-aos-once="true"
-            data-aos="fade-right"
-            style={{ justifyContent: 'start' }}
-          >
-            <StepBigtitle className={pixel.className}>
-              {WhyContent.title}
-            </StepBigtitle>
+            <BigTitle>SUIAI CHART</BigTitle>
 
-            {WhyContent.desc?.map((_) => (
-              <Desc key={_}>{_}</Desc>
-            ))}
-          </AboutWrap>
-        </Content>
+            <Flex
+              flexDirection="column"
+              alignItems="center"
+            >
+              <RobotImg
+                src={robot}
+                alt="robot"
+              />
+              <Desc>From A big fan of SUI AI 💚</Desc>
+            </Flex>
+          </Flex>
+
+          <ChartWrap
+            data-aos-once="true"
+            data-aos="zoom-in"
+          >
+            <ChartImg
+              src={chartImg}
+              alt="chart-img"
+            />
+          </ChartWrap>
+        </Flex>
       </StyledTokenOmics>
     </Container>
   )

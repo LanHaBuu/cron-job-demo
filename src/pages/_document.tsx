@@ -51,7 +51,7 @@ export default class MyDocument extends Document {
           />
           <link
             rel="shortcut icon"
-            href="/favicon.webp"
+            href="/small-logo.png"
           />
         </Head>
         <body>

@@ -13,10 +13,12 @@ const VideoBackground = styled.video`
 `
 
 const BackgroundContainer = styled.div`
-  position: relative;
+  position: absolute;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
+  top: 0;
+  bottom: 0;
 `
 
 const Overlay = styled(Flex)`
@@ -30,7 +32,7 @@ const Overlay = styled(Flex)`
 const Background = () => {
   return (
     <BackgroundContainer>
-      <Overlay />
+      {/* <Overlay /> */}
       <VideoBackground
         autoPlay
         muted

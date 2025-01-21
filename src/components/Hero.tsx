@@ -1,42 +1,41 @@
 import { devices, themes } from '@/config'
 import React, { FC, useCallback, useRef, useState } from 'react'
 import styled, { keyframes } from 'styled-components'
-import { openSans, pixel } from '@/fonts'
+import { openSans } from '@/fonts'
 import Background from './Background/CustomBg'
 import SearchIcon from '@mui/icons-material/Search'
 import Image from 'next/image'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import headerImg from '@/public/header.webp'
 import suiAiImg from '@/public/suai_logo.png'
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown'
-import { HeroContent } from '@/config/constant'
 import { useRouter } from 'next/router'
 import { ToastContainer, toast } from 'react-toastify'
 import Flex from './commonStyled/Flex'
 import Text from './commonStyled/Text'
 import { isAddress } from './utils'
+import Box from './commonStyled/Box'
 
 const StyledHero = styled.div`
-  /* height: max-content; */
   position: relative;
 `
 
 const HeroWrapper = styled.div`
-  position: absolute;
+  position: relative;
   left: 0;
   right: 0;
   width: 100%;
   height: max-content;
   display: flex;
   justify-content: center;
-  top: 120px;
   z-index: 1;
-  @media ${devices.mobileL} {
-    top: 200px;
-  }
+  top: 90px;
 
-  @media ${devices.tablet} {
-    top: 230px;
+  padding-top: 40px;
+  padding-bottom: 80px;
+
+  @media ${devices.laptop} {
+    padding-top: 110px;
+    padding-bottom: 110px;
   }
 `
 
@@ -48,6 +47,7 @@ const ContentInner = styled.div`
   padding: 0 10px;
   justify-content: center;
   align-items: center;
+  z-index: 1;
 `
 
 const BigTitle = styled.h1`
@@ -155,7 +155,7 @@ const Card = styled(Flex)`
   background-color: #fff;
   border: 1px solid #dedede;
   border-radius: 10px;
-  padding: 16px;
+  padding: 10px;
 
   max-width: 480px;
   flex-direction: column;
@@ -165,12 +165,17 @@ const Card = styled(Flex)`
   &:hover {
     transform: scale(1.03);
   }
+
+  @media ${devices.laptop} {
+    padding: 16px;
+  }
 `
 
 const CardWrap = styled(Flex)`
   gap: 20px;
   margin-top: 20px;
   flex-direction: column;
+
   @media ${devices.laptop} {
     flex-direction: row;
   }
@@ -194,7 +199,11 @@ const SearchWrap = styled(Flex)`
   width: 100%;
   max-width: 600px;
   padding-right: 10px;
-  margin-top: 10px;
+  margin-top: 15px;
+
+  @media ${devices.laptop} {
+    margin-top: 30px;
+  }
 `
 
 const Input = styled.input`
@@ -250,6 +259,14 @@ const BouncingIcon = styled(KeyboardDoubleArrowDownIcon)`
   animation: ${bounce} 1.5s infinite ease-in-out;
 `
 
+const IconWrap = styled(Box)`
+  transition: all 0.3s;
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.03);
+  }
+`
+
 interface HeroProps {}
 
 const Hero: FC<HeroProps> = () => {
@@ -279,6 +296,8 @@ const Hero: FC<HeroProps> = () => {
     }
   }
 
+  const { push } = useRouter()
+
   return (
     <StyledHero>
       <ToastContainer />
@@ -292,8 +311,10 @@ const Hero: FC<HeroProps> = () => {
           </Desc>
 
           <SearchWrap>
-            <Input placeholder="Enter CA to see magic" />
-            <SearchIcon />
+            <Input placeholder="Enter CA to see the magic..." />
+            <IconWrap>
+              <SearchIcon />
+            </IconWrap>
           </SearchWrap>
 
           <CardWrap>
@@ -374,14 +395,10 @@ const Hero: FC<HeroProps> = () => {
                   gap: '10px',
                 }}
               >
-                {/* <LogoContainer> */}
                 <Logo
                   alt="logo"
                   src={suiAiImg}
-                  // width={120}
-                  // height={120}
                 />
-                {/* </LogoContainer> */}
 
                 <Flex
                   flexDirection="column"
@@ -416,7 +433,11 @@ const Hero: FC<HeroProps> = () => {
             </Desc>
           </BottomDesc>
 
-          <BouncingFlex>
+          <BouncingFlex
+            onClick={() => {
+              push('/#about')
+            }}
+          >
             <BouncingText
               mr="10px"
               fontSize="22px"
@@ -433,9 +454,8 @@ const Hero: FC<HeroProps> = () => {
             </BouncingIcon>
           </BouncingFlex>
         </ContentInner>
+        <Background />
       </HeroWrapper>
-
-      <Background />
     </StyledHero>
   )
 }
