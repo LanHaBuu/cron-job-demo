@@ -212,7 +212,7 @@ const Input = styled.input`
   outline: none;
   width: 100%;
   color: #868686;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
 
   &::placeholder {
@@ -284,8 +284,8 @@ const Hero: FC<HeroProps> = () => {
 
   const handleSearch = () => {
     const address = searchAddress.trim()
+    router.push(`/community?address=${searchAddress}`)
     if (isAddress(address)) {
-      router.push(`/community?address=${searchAddress}`)
       setSearchAddress('')
       searchRef.current?.blur()
     } else {
@@ -311,8 +311,12 @@ const Hero: FC<HeroProps> = () => {
           </Desc>
 
           <SearchWrap>
-            <Input placeholder="Enter CA to see the magic..." />
-            <IconWrap>
+            <Input
+              placeholder="Enter CA to see the magic..."
+              onKeyDown={handleKeyDown}
+              onChange={(e) => setSearchAddress(e.target.value)}
+            />
+            <IconWrap onClick={handleSearch}>
               <SearchIcon />
             </IconWrap>
           </SearchWrap>
