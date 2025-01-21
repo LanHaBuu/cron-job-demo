@@ -23,7 +23,7 @@ const StyledFooter = styled(Box)`
   justify-content: center;
   position: relative;
   min-height: 500px;
-  background-color: #eeeeee;
+  background-color: #e5e5e5;
 
   @media ${devices.tablet} {
     padding-top: 120px;

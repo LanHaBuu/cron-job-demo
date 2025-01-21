@@ -123,7 +123,7 @@ export const LongEggImg = styled(Image)`
     max-width: unset;
   }
 
-  animation: ${spin} 20s infinite ease;
+  animation: ${spin} 30s infinite ease;
 `
 
 const BigTitle = styled.p`
