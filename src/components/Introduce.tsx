@@ -156,6 +156,7 @@ const Desc = styled.h1`
   }
 
   @media ${devices.laptop} {
+    text-align: left;
     font-size: 20px;
   }
 `
