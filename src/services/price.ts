@@ -22,7 +22,24 @@ const getPriceSuiDexscreener = async () => {
   }
 };
 
+const getDataDexscreener = async (address:string) => {
+  try {
+    const url = `${URL_DEXSCREENER}/${address}`;
+    const response = await axios.get(url);
+    const data = response?.data;
+    if(data?.length>0) {
+      return data?.map((item:any) => {
+        return item?.pairAddress
+      })
+    }
+    return []
+  } catch (e) {
+    return null;
+  }
+}
+
 const priceService = {
     getPriceSuiDexscreener,
+    getDataDexscreener
 };
 export default priceService;

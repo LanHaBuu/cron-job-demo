@@ -1,11 +1,10 @@
 export interface IWalletInfo {
-    balance: number,
-    balanceUsd: number,
-    coinName: string,
-    coinPrice: number,
-    coinSymbol: string,
-    decimals: number,
     coinType: string,
+    name: string,
+    symbol: string,
+    decimals: number,
+    balance: string,
+    price: string,
     logo: string,
     verified: boolean
 }

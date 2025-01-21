@@ -7,6 +7,7 @@ export const useCAInfo = (caAddress: string) => {
     caAddress ? () => getCAInfo(caAddress) : null,
     {
       revalidateOnFocus: false,
+      revalidateOnMount: true
     }
   );
   return { data, isLoading };

@@ -13,6 +13,13 @@ export const formatNumberWithCommas = (number: any) => {
   });
 };
 
-export const formatAmount = (amount: any, decimal: number) => {
-  return amount / Math.pow(10, decimal);
+export const formatAmount = (balance: any, decimal: number) => {
+  return balance / Math.pow(10, decimal);
+};
+
+export const isAddress = (address: string) => {
+  if (!address.startsWith("0x")) {
+    return false;
+  }
+  return true;
 };

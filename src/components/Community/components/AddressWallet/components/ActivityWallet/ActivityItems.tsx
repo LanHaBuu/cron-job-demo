@@ -9,7 +9,6 @@ import {
   sliceAddress,
 } from "@/components/utils";
 import Image from "next/image";
-import { SIZE_LOGO } from "../..";
 import { themes } from "@/config";
 import SuiIcon from "@/components/icons/SuiIcon";
 import {
@@ -22,6 +21,7 @@ import Tooltip, { tooltipClasses, TooltipProps } from "@mui/material/Tooltip";
 import styled from "styled-components";
 import ComponentCopy from "@/components/Copy";
 import LinkCustom from "@/components/commonStyled/LinkCustom";
+import { SIZE_LOGO } from "../HeaderInfoWallet";
 
 const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />

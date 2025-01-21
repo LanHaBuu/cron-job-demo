@@ -8,18 +8,19 @@ import { HeaderColumns, TableColWidth } from "./config";
 import Image from "next/image";
 import SuiIcon from "@/components/icons/SuiIcon";
 import VerifiedIcon from "@/components/icons/Verified";
-import { sliceAddress } from "@/components/utils";
+import { formatAmount, sliceAddress } from "@/components/utils";
 import ComponentCopy from "@/components/Copy";
 import { IWalletActivity, IWalletInfo } from "./type";
 import ActivityWallet from "./components/ActivityWallet";
-
-export const SIZE_LOGO = 30;
-export const MARGIN_LOGO = 10;
+import HeaderInfoWallet, {
+  MARGIN_LOGO,
+  SIZE_LOGO,
+} from "./components/HeaderInfoWallet";
 
 interface IAddressWallet {
   walletInfo: {
-    data: IWalletInfo[];
-    totalUsdValue: string;
+    coins: IWalletInfo[];
+    usdValue: string;
   };
   walletActivity: IWalletActivity[];
   isLoading: boolean;
@@ -93,82 +94,18 @@ const AddressWallet = ({
   hasNextPage,
   loadMore,
 }: IAddressWallet) => {
-  const [showDetail, setShowDetail] = useState<boolean>(false);
-
   return (
     <Box>
-      <Flex style={{ alignItems: "center", gap: "10px" }}>
-        <Title>Address Wallet Creator</Title>
-        <Title>-</Title>
-        <Title>
-          Total Value USD: {Number(walletInfo?.totalUsdValue)?.toFixed(6) ?? 0}
-        </Title>
-      </Flex>
-      <Header>
-        {HeaderColumns?.map((item: any) => (
-          <Box style={{ width: `${item?.width}px` }}>
-            <Text fontWeight={800} fontSize='18px'>
-              {item?.title}
-            </Text>
-          </Box>
-        ))}
-      </Header>
-      { walletInfo?.data?.map((item: IWalletInfo, index) => {
-        return (
-          <Flex key={index} height={60} alignItems='center'>
-            <Flex style={{ marginRight: MARGIN_LOGO }} alignItems='center'>
-              <WrapperLogo>
-                {item?.logo ? (
-                  <Image
-                    src={item?.logo}
-                    width={SIZE_LOGO}
-                    height={SIZE_LOGO}
-                    alt='logo'
-                    style={{
-                      borderRadius: "50%",
-                      boxShadow: `0 0 5px ${themes.main}, 0 0 10px ${themes.main}`,
-                    }}
-                  />
-                ) : (
-                  <SuiIcon width={SIZE_LOGO} height={SIZE_LOGO} />
-                )}
-                {item?.verified && (
-                  <WrapperVerifiedIcon>
-                    <VerifiedIcon width={16} height={16} fill={themes.main} />
-                  </WrapperVerifiedIcon>
-                )}
-              </WrapperLogo>
-            </Flex>
-            <Box
-              style={{
-                width: `${TableColWidth.token - SIZE_LOGO - MARGIN_LOGO}px`,
-              }}
-            >
-              <BodyText>{`${item?.coinName} (${item?.coinSymbol})`}</BodyText>
-              <Flex alignItems='center' style={{ gap: "6px" }}>
-                <BodyText>{sliceAddress(item?.coinType)}</BodyText>
-                <ComponentCopy stringCopy={item?.coinType} />
-              </Flex>
-            </Box>
-            <Box style={{ width: `${TableColWidth.amount}px` }}>
-              <BodyText>{item?.balance}</BodyText>
-            </Box>
-            <Box style={{ width: `${TableColWidth.price}px` }}>
-              <BodyText>${item?.coinPrice?.toFixed(6)}</BodyText>
-            </Box>
-          </Flex>
-        );
-      })}
+      <HeaderInfoWallet walletInfo={walletInfo} />
       <Detail>
-          <Title style={{margin:0}}>Transaction Details: </Title>
-      
-          <ActivityWallet
-            walletActivity={walletActivity}
-            isLoading={isLoading}
-            loadMore={loadMore}
-            hasNextPage={hasNextPage}
-          />
+        <Title style={{ margin: 0 }}>Transaction Details: </Title>
 
+        <ActivityWallet
+          walletActivity={walletActivity}
+          isLoading={isLoading}
+          loadMore={loadMore}
+          hasNextPage={hasNextPage}
+        />
       </Detail>
     </Box>
   );

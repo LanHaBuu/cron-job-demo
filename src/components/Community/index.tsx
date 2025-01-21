@@ -1,4 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useRef,
+  useState,
+} from "react";
 import styled from "styled-components";
 import Chart from "./components/Chart";
 import { devices, position, themes } from "@/config";
@@ -19,6 +23,13 @@ import AddressWallet from "./components/AddressWallet";
 import { useWalletInfo } from "./components/AddressWallet/hooks/useWalletInfo";
 import Text from "@/components/commonStyled/Text";
 import { useWalletActivity } from "./components/AddressWallet/hooks/useWalletActivity";
+import { isAddress } from "../utils";
+import Flex from "../commonStyled/Flex";
+import ChartDexscreener from "./components/ChartDexscreener";
+import { getPairDexScreenerInfo } from "./components/ChartDexscreener/api";
+import Box from "../commonStyled/Box";
+import { useWalletCreatorActivity } from "./components/AddressWallet/hooks/useWalletActivityCreator";
+import ActivityCretor from "./components/AddressWallet/components/ActivityCretor";
 
 const PageContainer = styled.div`
   min-height: 100vh;
@@ -61,31 +72,6 @@ const Title = styled.h1`
   text-shadow: 0 0 5px ${themes.main}, 0 0 10px ${themes.main};
 `;
 
-const BackgroundEffect = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(
-      circle,
-      transparent,
-      ${themes.main}10,
-      transparent
-    );
-  }
-`;
-
 const WrapperTitle = styled.div`
   display: flex;
   justify-content: center;
@@ -94,6 +80,7 @@ const WrapperTitle = styled.div`
 const Content = styled.div`
   margin-top: 20px;
   display: flex;
+  flex-direction: column;
   gap: 10px;
 
   @media (max-width: 1400px) {
@@ -102,7 +89,6 @@ const Content = styled.div`
 `;
 
 const ContentCA = styled(Themes)`
-  width: 43%;
   height: 100%;
   padding: 30px;
 
@@ -112,12 +98,31 @@ const ContentCA = styled(Themes)`
 `;
 
 const ContentChart = styled(Themes)`
-  width: 56%;
   height: 100%;
-  padding: 20px;
+  padding: 30px;
 
   @media (max-width: 1400px) {
     width: 100%;
+  }
+`;
+
+const WrapperButtonChart = styled(Flex)`
+  margin-bottom: 20px;
+  gap: 10px;
+`;
+
+const ButtonChart = styled.button`
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: ${themes.main};
+  color: #000000;
+  font-weight: 400;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    background: #00bfa5;
   }
 `;
 
@@ -131,27 +136,29 @@ const Community = () => {
   const router = useRouter();
   const { address } = router.query;
   const [input, setInput] = useState("");
-  const [tokenAddress, setTokenAddress] = useState(address || "");
+  const [chartChoose, setChartChoose] = useState("fun");
+  const [isExistDexscreener, setIsExistDexscreener] = useState(false);
+
   const { data: caInfo, isLoading: isLoadingCAInfo } = useCAInfo(
-    tokenAddress as string
+    address as string
   );
 
   const { data: walletInfo, isLoading: isLoadingWallet } = useWalletInfo(
     caInfo?.creator
   );
 
-  const {
-    data: walletActivity,
-    isLoading,
-    loadMore,
-    hasNextPage,
-  } = useWalletActivity(caInfo?.creator);
+  const { data: creatorActivity, isLoading: isLoadingWalletCreatorActivity } = useWalletCreatorActivity(
+    caInfo?.creator
+  );
 
-  useEffect(() => {
-    if (address) {
-      setTokenAddress(address as string);
-    }
-  }, [address]);
+  // const {
+  //   data: walletActivity,
+  //   isLoading,
+  //   loadMore,
+  //   hasNextPage,
+  // } = useWalletActivity(caInfo?.creator);
+
+
 
   const searchRef = useRef<HTMLInputElement>(null);
 
@@ -165,8 +172,8 @@ const Community = () => {
 
   const handleSearch = () => {
     const address = input.trim();
-    if (address) {
-      setTokenAddress(address);
+    if (isAddress(address)) {
+      router.push(`/community?address=${address}`);
       setInput("");
       searchRef.current?.blur();
     } else {
@@ -174,9 +181,20 @@ const Community = () => {
     }
   };
 
+  const handleCurrentChart = useCallback(async() => {
+    const data = await getPairDexScreenerInfo(caInfo?.token_address);
+    if (data?.length > 0) {
+      setIsExistDexscreener(true);
+    } else {
+      setIsExistDexscreener(false);
+    }
+    setChartChoose("current")
+  },[caInfo])
+
   const ComponentNotFound = () => {
     return <Text>Not Found</Text>;
   };
+  
 
   return (
     <PageContainer>
@@ -213,7 +231,37 @@ const Community = () => {
           </ContentCA>
 
           <ContentChart>
-            <Chart caInfo={caInfo} />
+            <WrapperButtonChart>
+              <ButtonChart onClick={() => setChartChoose("fun")}>
+                Fun chart
+              </ButtonChart>
+
+              <ButtonChart onClick={handleCurrentChart}>
+                Current chart
+              </ButtonChart>
+            </WrapperButtonChart>
+            {caInfo ? (
+              <>
+                <Box
+                  style={{ display: chartChoose == "fun" ? "block" : "none" }}
+                >
+                  <Chart caInfo={caInfo} />
+                </Box>
+                <Box
+                  style={{
+                    display: chartChoose == "current" ? "block" : "none",
+                  }}
+                >
+                  {isExistDexscreener ? (
+                    <ChartDexscreener caInfo={caInfo} />
+                  ) : (
+                    <ComponentNotFound />
+                  )}
+                </Box>
+              </>
+            ) : (
+              <ComponentNotFound />
+            )}
           </ContentChart>
         </Content>
 
@@ -221,13 +269,7 @@ const Community = () => {
           {isLoadingWallet ? (
             <LoadingDot />
           ) : walletInfo ? (
-            <AddressWallet
-              walletInfo={walletInfo}
-              walletActivity={walletActivity}
-              isLoading={isLoading}
-              loadMore={loadMore}
-              hasNextPage={hasNextPage}
-            />
+            <ActivityCretor walletInfo={walletInfo} creatorActivity={creatorActivity} searchAddress={address}/>
           ) : (
             <ComponentNotFound />
           )}

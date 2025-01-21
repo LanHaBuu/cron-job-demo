@@ -14,3 +14,16 @@ export const getInfoWallet = async (address: string) => {
     return null;
   }
 };
+
+export const getInfoWalletCreator = async (address: string) => {
+  try {
+    if (address) {
+      const url = `${apiEndpoints.nextApi}/wallet-activity-creator/${address}`;
+      const res = await axios.get(url);
+      return res?.data;
+    }
+    return null;
+  } catch (err) {
+    return null;
+  }
+};

@@ -12,10 +12,10 @@ const ChartWrapper = styled.div`
 `;
 
 interface IChart {
-  chart: any;
+  caInfo: any;
 }
 
-const Chart = ({ caInfo }: any) => {
+const Chart = ({ caInfo }: IChart) => {
   const { data: chart } = useChart(caInfo?.pool_id);
   const chartRef = useRef<HTMLDivElement>(null);
   const [chartCreated, setChartCreated] = useState<IChartApi | undefined>();

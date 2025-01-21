@@ -3,13 +3,12 @@ import React, { FC, useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 import { pixel } from "@/fonts";
 import Background from "./Background/CustomBg";
-
 import Image from "next/image";
-
 import headerImg from "@/public/header.webp";
 import { HeroContent } from "@/config/constant";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
+import { isAddress } from "./utils";
 
 const StyledHero = styled.div`
   height: max-content;
@@ -180,7 +179,7 @@ const Hero: FC<HeroProps> = () => {
 
   const handleSearch = () => {
     const address = searchAddress.trim();
-    if (address) {
+    if (isAddress(address)) {
       router.push(`/community?address=${searchAddress}`);
       setSearchAddress("");
       searchRef.current?.blur();
