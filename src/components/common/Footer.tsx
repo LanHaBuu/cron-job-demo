@@ -147,6 +147,7 @@ const Footer = () => {
           <Text
             fontSize="40px"
             fontWeight={500}
+            textAlign="center"
           >
             Join Our Community
           </Text>
@@ -154,7 +155,10 @@ const Footer = () => {
             alt="gaming"
             src={gameRobotImg}
           />
-          <Text color="#868686">
+          <Text
+            color="#868686"
+            textAlign="center"
+          >
             Join us, share your thoughts, and be part of our journey to grow
             together!
           </Text>
