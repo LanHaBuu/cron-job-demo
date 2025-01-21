@@ -20,30 +20,22 @@ interface IAddressWalletCreator {
 
 const Title = styled.h1`
   font-size: 20px;
-  margin-bottom: 20px;
-  text-shadow: 0 0 5px ${themes.main}, 0 0 10px ${themes.main};
   text-transform: uppercase;
+  color: #000000;
 `;
 
-const Detail = styled.div`
-  margin-top: 20px;
-`;
 
 export const Button = styled.button`
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
-  background: ${themes.main};
   color: #000000;
   font-size: 1rem;
-  font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 0 5px ${themes.main}, 0 0 10px ${themes.main};
-  transition: 0.3s ease;
+  transition: all 0.3s;
 
   &:hover {
-    background: #00bfa5;
-    box-shadow: 0 0 10px ${themes.main}, 0 0 20px ${themes.main};
+    transform: scale(1.05);
   }
 `;
 
@@ -55,8 +47,8 @@ const ActivityCretor = ({
   const [filter, setFilter] = useState<boolean>(true);
 
   const tokenMain = useMemo(() => {
-    return walletInfo?.coins?.find((item) => item.coinType == searchAddress)
-  },[walletInfo,searchAddress])
+    return walletInfo?.coins?.find((item) => item.coinType == searchAddress);
+  }, [walletInfo, searchAddress]);
 
   const creatorActivityFilter: IWalletActivity[] = useMemo(() => {
     if (filter) {
@@ -72,16 +64,34 @@ const ActivityCretor = ({
     return creatorActivity;
   }, [creatorActivity, filter, searchAddress]);
 
-
   return (
     <Box>
-      <HeaderInfoWallet walletInfo={walletInfo} isCreator searchAddress={searchAddress} creatorActivityFilter={creatorActivityFilter}/>
-      <Detail>
+      <HeaderInfoWallet
+        walletInfo={walletInfo}
+        isCreator
+        searchAddress={searchAddress}
+        creatorActivityFilter={creatorActivityFilter}
+      />
+      <Box paddingY='30px'>
         <Flex alignItems='center' style={{ gap: "10px" }}>
-          <Title style={{ margin: 0 }}>Transaction Details: </Title>
+          <Title>Transaction Details: </Title>
           <Flex style={{ gap: "10px" }}>
-            <Button onClick={() => setFilter(true)}>{tokenMain?.symbol ?? 'Token'}</Button>
-            <Button onClick={() => setFilter(false)}>Full</Button>
+            <Button
+              style={{
+                backgroundColor: filter == true ? "#868686" : "",
+              }}
+              onClick={() => setFilter(true)}
+            >
+              {tokenMain?.symbol ?? "Token"}
+            </Button>
+            <Button
+              style={{
+                backgroundColor: filter == true ? "" : "#868686",
+              }}
+              onClick={() => setFilter(false)}
+            >
+              Full
+            </Button>
           </Flex>
         </Flex>
 
@@ -89,7 +99,7 @@ const ActivityCretor = ({
           <Flex style={{ marginTop: "20px" }}>
             {HeaderActivityColumns?.map((item: any) => (
               <Box key={item?.title} style={{ width: item?.width }}>
-                <Text fontSize='16px' fontWeight={700}>
+                <Text color='#000000' fontSize='20px' fontWeight={600}>
                   {item.title}
                 </Text>
               </Box>
@@ -100,7 +110,7 @@ const ActivityCretor = ({
               <ActivityItems item={item} index={index} />
             ))}
         </Flex>
-      </Detail>
+      </Box>
     </Box>
   );
 };

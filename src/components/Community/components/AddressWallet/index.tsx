@@ -30,7 +30,6 @@ interface IAddressWallet {
 
 const Title = styled.h1`
   font-size: 20px;
-  margin-bottom: 20px;
   text-shadow: 0 0 5px ${themes.main}, 0 0 10px ${themes.main};
   text-transform: uppercase;
 `;
@@ -98,7 +97,7 @@ const AddressWallet = ({
     <Box>
       <HeaderInfoWallet walletInfo={walletInfo} />
       <Detail>
-        <Title style={{ margin: 0 }}>Transaction Details: </Title>
+        <Title>Transaction Details: </Title>
 
         <ActivityWallet
           walletActivity={walletActivity}

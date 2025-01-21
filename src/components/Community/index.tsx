@@ -1,8 +1,4 @@
-import React, {
-  useCallback,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 import Chart from "./components/Chart";
 import { devices, position, themes } from "@/config";
@@ -10,13 +6,7 @@ import { useChart } from "./components/Chart/hooks/useChart";
 import { LoadingDot } from "../Loader";
 import { useCAInfo } from "./components/Description/hooks/useCAInfo";
 import Description from "./components/Description";
-import {
-  ButtonSearch,
-  InputSearch,
-  SearchBox,
-  Themes,
-  WrapperInput,
-} from "../Hero";
+import { BigTitle, IconWrap, Input } from "../Hero";
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/router";
 import AddressWallet from "./components/AddressWallet";
@@ -30,12 +20,12 @@ import { getPairDexScreenerInfo } from "./components/ChartDexscreener/api";
 import Box from "../commonStyled/Box";
 import { useWalletCreatorActivity } from "./components/AddressWallet/hooks/useWalletActivityCreator";
 import ActivityCretor from "./components/AddressWallet/components/ActivityCretor";
+import SearchIcon from "../icons/SearchIcon";
+import { openSans } from "@/fonts";
 
 const PageContainer = styled.div`
   min-height: 100vh;
-  background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
   color: ${themes.main};
-  font-family: "Courier New", Courier, monospace;
   overflow: hidden;
   padding: 0 10px;
 `;
@@ -66,15 +56,20 @@ const PageWrapper = styled.div`
   }
 `;
 
-const Title = styled.h1`
-  font-size: 2rem;
-  margin-bottom: 20px;
-  text-shadow: 0 0 5px ${themes.main}, 0 0 10px ${themes.main};
-`;
-
 const WrapperTitle = styled.div`
   display: flex;
   justify-content: center;
+`;
+
+const SearchWrap = styled(Flex)`
+  border-radius: 20px;
+  padding: 10px 20px;
+  border: 1px solid #ebe1e1;
+  background-color: #f6f6f6;
+  width: 100%;
+  max-width: 600px;
+  padding-right: 10px;
+  margin-top: 15px;
 `;
 
 const Content = styled.div`
@@ -88,18 +83,23 @@ const Content = styled.div`
   }
 `;
 
-const ContentCA = styled(Themes)`
-  height: 100%;
-  padding: 30px;
+const ContentCA = styled(Flex)`
+  background-color: #fff;
+  border: 1px solid #dedede;
+  border-radius: 10px;
+  padding: 10px;
+  flex-direction: column;
+  cursor: pointer;
+  transition: 0.3s all;
+  max-width: 400px;
 
   @media (max-width: 1400px) {
     width: 100%;
   }
 `;
 
-const ContentChart = styled(Themes)`
+const ContentChart = styled.div`
   height: 100%;
-  padding: 30px;
 
   @media (max-width: 1400px) {
     width: 100%;
@@ -115,21 +115,25 @@ const ButtonChart = styled.button`
   padding: 10px;
   border: none;
   border-radius: 5px;
-  background: ${themes.main};
   color: #000000;
   font-weight: 400;
   font-size: 14px;
   cursor: pointer;
-
+  transition: all 0.3s;
   &:hover {
-    background: #00bfa5;
+    transform: scale(1.05);
   }
 `;
 
-const WalletInfo = styled(Themes)`
+const WalletInfo = styled.div`
   margin-top: 20px;
   height: 100%;
-  padding: 30px;
+`;
+
+const ChartWrap = styled(Box)`
+  border: 1px solid;
+  border-radius: 20px;
+  overflow: hidden;
 `;
 
 const Community = () => {
@@ -147,9 +151,8 @@ const Community = () => {
     caInfo?.creator
   );
 
-  const { data: creatorActivity, isLoading: isLoadingWalletCreatorActivity } = useWalletCreatorActivity(
-    caInfo?.creator
-  );
+  const { data: creatorActivity, isLoading: isLoadingWalletCreatorActivity } =
+    useWalletCreatorActivity(caInfo?.creator);
 
   // const {
   //   data: walletActivity,
@@ -157,8 +160,6 @@ const Community = () => {
   //   loadMore,
   //   hasNextPage,
   // } = useWalletActivity(caInfo?.creator);
-
-
 
   const searchRef = useRef<HTMLInputElement>(null);
 
@@ -172,41 +173,44 @@ const Community = () => {
 
   const handleSearch = () => {
     const address = input.trim();
-    if (isAddress(address)) {
-      router.push(`/community?address=${address}`);
-      setInput("");
-      searchRef.current?.blur();
-    } else {
+    if (!address) {
       toast.error("Please enter the token address.");
+    } else {
+      if (isAddress(address)) {
+        router.push(`/community?address=${address}`);
+        setInput("");
+        searchRef.current?.blur();
+      } else {
+        toast.error("Please enter the correct format of the token address.");
+      }
     }
   };
 
-  const handleCurrentChart = useCallback(async() => {
+  const handleCurrentChart = useCallback(async () => {
     const data = await getPairDexScreenerInfo(caInfo?.token_address);
     if (data?.length > 0) {
       setIsExistDexscreener(true);
     } else {
       setIsExistDexscreener(false);
     }
-    setChartChoose("current")
-  },[caInfo])
+    setChartChoose("current");
+  }, [caInfo]);
 
   const ComponentNotFound = () => {
     return <Text>Not Found</Text>;
   };
-  
 
   return (
     <PageContainer>
       {/* <BackgroundEffect /> */}
       <ToastContainer />
-      <PageWrapper>
+      <PageWrapper className={openSans.className}>
         <WrapperTitle>
-          <Title>Title</Title>
+          <BigTitle>Title</BigTitle>
         </WrapperTitle>
-        <SearchBox>
-          <WrapperInput>
-            <InputSearch
+        <Flex justifyContent='center'>
+          <SearchWrap>
+            <Input
               type='text'
               placeholder='Enter token address...'
               value={input}
@@ -214,10 +218,11 @@ const Community = () => {
               onKeyDown={handleKeyDown}
               spellCheck={false}
             />
-          </WrapperInput>
-
-          <ButtonSearch onClick={handleSearch}>Search</ButtonSearch>
-        </SearchBox>
+            <IconWrap onClick={handleSearch}>
+              <SearchIcon />
+            </IconWrap>
+          </SearchWrap>
+        </Flex>
 
         <Content>
           <ContentCA>
@@ -232,11 +237,21 @@ const Community = () => {
 
           <ContentChart>
             <WrapperButtonChart>
-              <ButtonChart onClick={() => setChartChoose("fun")}>
+              <ButtonChart
+                style={{
+                  backgroundColor: chartChoose == "fun" ? "#868686" : "",
+                }}
+                onClick={() => setChartChoose("fun")}
+              >
                 Fun chart
               </ButtonChart>
 
-              <ButtonChart onClick={handleCurrentChart}>
+              <ButtonChart
+                style={{
+                  backgroundColor: chartChoose == "current" ? "#868686" : "",
+                }}
+                onClick={handleCurrentChart}
+              >
                 Current chart
               </ButtonChart>
             </WrapperButtonChart>
@@ -245,7 +260,9 @@ const Community = () => {
                 <Box
                   style={{ display: chartChoose == "fun" ? "block" : "none" }}
                 >
-                  <Chart caInfo={caInfo} />
+                  <ChartWrap data-aos-once='true' data-aos='zoom-in'>
+                    <Chart caInfo={caInfo} />
+                  </ChartWrap>
                 </Box>
                 <Box
                   style={{
@@ -269,7 +286,11 @@ const Community = () => {
           {isLoadingWallet ? (
             <LoadingDot />
           ) : walletInfo ? (
-            <ActivityCretor walletInfo={walletInfo} creatorActivity={creatorActivity} searchAddress={address}/>
+            <ActivityCretor
+              walletInfo={walletInfo}
+              creatorActivity={creatorActivity}
+              searchAddress={address}
+            />
           ) : (
             <ComponentNotFound />
           )}

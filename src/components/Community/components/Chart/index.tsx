@@ -40,14 +40,14 @@ const Chart = ({ caInfo }: IChart) => {
     if (chart?.length > 0) {
       const chartConfig = createChart(chartRef.current, {
         layout: {
-          textColor: "white",
+          textColor: "#216e05",
           background: {
-            color: "black",
+            color: "white",
           },
           attributionLogo: false,
         },
         width: chartWidth,
-        height: 300,
+        height: 450,
         crosshair: {
           mode: 0,
         },
@@ -84,7 +84,7 @@ const Chart = ({ caInfo }: IChart) => {
 
       setChartCreated(chartConfig);
 
-      chartConfig.timeScale();
+      chartConfig.timeScale().fitContent();
 
       // eslint-disable-next-line consistent-return
       return () => {

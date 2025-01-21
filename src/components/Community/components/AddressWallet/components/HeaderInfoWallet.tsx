@@ -7,7 +7,11 @@ import Text from "@/components/commonStyled/Text";
 import Image from "next/image";
 import SuiIcon from "@/components/icons/SuiIcon";
 import VerifiedIcon from "@/components/icons/Verified";
-import { formatAmount, formatNumberWithCommas, sliceAddress } from "@/components/utils";
+import {
+  formatAmount,
+  formatNumberWithCommas,
+  sliceAddress,
+} from "@/components/utils";
 import ComponentCopy from "@/components/Copy";
 import { IWalletActivity, IWalletInfo } from "../type";
 import { HeaderColumns, TableColWidth } from "../config";
@@ -29,9 +33,8 @@ interface IHeaderWallet {
 
 const Title = styled.h1`
   font-size: 20px;
-  margin-bottom: 20px;
-  text-shadow: 0 0 5px ${themes.main}, 0 0 10px ${themes.main};
   text-transform: uppercase;
+  color: #000000;
 `;
 
 const Header = styled.div`
@@ -45,6 +48,7 @@ const BodyText = styled(Text)`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: #868686;
 `;
 
 const WrapperLogo = styled.div`
@@ -57,7 +61,7 @@ const WrapperLogo = styled.div`
 const WrapperVerifiedIcon = styled.div`
   width: 16px;
   height: 16px;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: "#ffffff";
   position: absolute;
   top: -5px;
   right: -5px;
@@ -74,10 +78,7 @@ const HeaderInfoWallet = ({
     if (size(creatorActivityFilter) > 0 && searchAddress) {
       return creatorActivityFilter
         ?.find((item: IWalletActivity) => item?.type == TYPE_CREATE_COIN)
-        ?.coinChanges?.find(
-          (coin: any) =>
-            coin.coinAddress == searchAddress
-        );
+        ?.coinChanges?.find((coin: any) => coin.coinAddress == searchAddress);
     }
   }, [creatorActivityFilter, searchAddress]);
 
@@ -87,13 +88,13 @@ const HeaderInfoWallet = ({
         <Title>Address Wallet {isCreator ? "Creator" : ""}</Title>
         <Title>-</Title>
         <Title>
-          Total Value USD: {Number(walletInfo?.usdValue)?.toFixed(6) ?? 0}
+          Total Value USD: {Number(walletInfo?.usdValue)?.toFixed(6) ?? 0}$
         </Title>
       </Flex>
       <Header>
         {HeaderColumns?.map((item: any) => (
           <Box style={{ width: `${item?.width}px` }}>
-            <Text fontWeight={800} fontSize='18px'>
+            <Text color='#000000' fontSize='20px' fontWeight={600}>
               {item?.title}
             </Text>
           </Box>
@@ -113,7 +114,6 @@ const HeaderInfoWallet = ({
                       alt='logo'
                       style={{
                         borderRadius: "50%",
-                        boxShadow: `0 0 5px ${themes.main}, 0 0 10px ${themes.main}`,
                       }}
                     />
                   ) : (
@@ -121,7 +121,7 @@ const HeaderInfoWallet = ({
                   )}
                   {item?.verified && (
                     <WrapperVerifiedIcon>
-                      <VerifiedIcon width={16} height={16} fill={themes.main} />
+                      <VerifiedIcon width={16} height={16} fill='green' />
                     </WrapperVerifiedIcon>
                   )}
                 </WrapperLogo>
@@ -144,7 +144,9 @@ const HeaderInfoWallet = ({
               </Box>
               <Box style={{ width: `${TableColWidth.price}px` }}>
                 <BodyText>
-                  {item?.price ? `${Number(item?.price)?.toFixed(6)}` : ""}
+                  {item?.price
+                    ? `${parseFloat(Number(item?.price).toFixed(6))}$`
+                    : ""}
                 </BodyText>
               </Box>
             </Flex>
@@ -154,8 +156,29 @@ const HeaderInfoWallet = ({
               isCreator &&
               item?.coinType == searchAddress && (
                 <Box>
-                  <Text>Initial quantity:  {tokenMain ? formatNumberWithCommas(formatAmount(tokenMain?.amount, tokenMain?.decimal)) : 0} {tokenMain?.symbol}</Text>
-                  <Text>Remaining quantity:  {formatNumberWithCommas(formatAmount(item?.balance, item?.decimals))} {item?.symbol}</Text>
+                  <Text color='#000000' fontSize='20px' fontWeight={600}>
+                    Token Holdings:
+                  </Text>
+                  <Flex style={{ gap: "6px" }}>
+                    <Text>Start:</Text>
+                    <Text color='#868686'>
+                      {tokenMain
+                        ? formatNumberWithCommas(
+                            formatAmount(tokenMain?.amount, tokenMain?.decimal)
+                          )
+                        : 0}{' '}
+                      {tokenMain?.symbol}
+                    </Text>
+                  </Flex>
+                  <Flex style={{ gap: "6px" }}>
+                    <Text>Now:</Text>
+                    <Text color='#868686'>
+                      {formatNumberWithCommas(
+                        formatAmount(item?.balance, item?.decimals)
+                      )}{' '}
+                      {item?.symbol}
+                    </Text>
+                  </Flex>
                 </Box>
               )}
           </Box>

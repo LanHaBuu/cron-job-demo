@@ -48,7 +48,7 @@ const ActivityItems = ({ item, index }: IActivityItems) => {
       <Box style={{ width: TableActivityColWidth.type }}>
         <Text>{item?.type}</Text>
         <Flex alignItems='center' style={{ gap: "4px" }}>
-          <LinkCustom href={urlTx} target='_blank'>
+          <LinkCustom href={urlTx} target='_blank' style={{color:"#868686"}}>
             {sliceAddress(item?.transaction, 8)}
           </LinkCustom>
           <ComponentCopy stringCopy={item?.transaction} />
@@ -67,22 +67,21 @@ const ActivityItems = ({ item, index }: IActivityItems) => {
                 alignItems: "center",
               }}
             >
-              <Box>
+              <>
                 {coinChange?.logo ? (
                   <Image
                     src={coinChange?.logo}
-                    width={SIZE_LOGO}
-                    height={SIZE_LOGO}
+                    width={20}
+                    height={20}
                     alt='logo'
                     style={{
                       borderRadius: "50%",
-                      // boxShadow: `0 0 5px ${themes.main}, 0 0 10px ${themes.main}`,
                     }}
                   />
                 ) : (
-                  <SuiIcon width={SIZE_LOGO} height={SIZE_LOGO} />
+                  <SuiIcon width={20} height={20} />
                 )}
-              </Box>
+              </>
               <Box>
                 <Text
                   style={{
@@ -120,7 +119,6 @@ const ActivityItems = ({ item, index }: IActivityItems) => {
                   alt='logo'
                   style={{
                     borderRadius: "50%",
-                    // boxShadow: `0 0 5px ${themes.main}, 0 0 10px ${themes.main}`,
                   }}
                 />
               )}

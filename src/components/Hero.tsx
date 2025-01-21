@@ -1,23 +1,23 @@
-import { devices, themes } from '@/config'
-import React, { FC, useCallback, useRef, useState } from 'react'
-import styled, { keyframes } from 'styled-components'
-import { openSans } from '@/fonts'
-import Background from './Background/CustomBg'
-import SearchIcon from '@mui/icons-material/Search'
-import Image from 'next/image'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import suiAiImg from '@/public/suai_logo.png'
-import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown'
-import { useRouter } from 'next/router'
-import { ToastContainer, toast } from 'react-toastify'
-import Flex from './commonStyled/Flex'
-import Text from './commonStyled/Text'
-import { isAddress } from './utils'
-import Box from './commonStyled/Box'
-
+import { ADDRESS_SUI_AI, ADDRESS_TOKEN_MAIN, devices, themes } from "@/config";
+import React, { FC, useCallback, useRef, useState } from "react";
+import styled, { keyframes } from "styled-components";
+import { openSans } from "@/fonts";
+import Background from "./Background/CustomBg";
+import SearchIcon from "@mui/icons-material/Search";
+import Image from "next/image";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import suiAiImg from "@/public/suai_logo.png";
+import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
+import { useRouter } from "next/router";
+import { ToastContainer, toast } from "react-toastify";
+import Flex from "./commonStyled/Flex";
+import Text from "./commonStyled/Text";
+import { formatNumber, isAddress, sliceAddress } from "./utils";
+import Box from "./commonStyled/Box";
+import { useCASuiAIAndTokenMainInfo } from "./Community/components/Description/hooks/useCAInfo";
 const StyledHero = styled.div`
   position: relative;
-`
+`;
 
 const HeroWrapper = styled.div`
   position: relative;
@@ -37,7 +37,7 @@ const HeroWrapper = styled.div`
     padding-top: 110px;
     padding-bottom: 110px;
   }
-`
+`;
 
 const ContentInner = styled.div`
   display: flex;
@@ -48,9 +48,9 @@ const ContentInner = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 1;
-`
+`;
 
-const BigTitle = styled.h1`
+export const BigTitle = styled.h1`
   margin: 0;
   color: #000;
   font-weight: 700;
@@ -63,7 +63,7 @@ const BigTitle = styled.h1`
   @media ${devices.laptop} {
     font-size: 80px;
   }
-`
+`;
 
 const Desc = styled.h1`
   margin: 0;
@@ -79,7 +79,7 @@ const Desc = styled.h1`
   @media ${devices.laptop} {
     font-size: 20px;
   }
-`
+`;
 
 const EmptyBox = styled.div`
   background: #000;
@@ -90,66 +90,8 @@ const EmptyBox = styled.div`
   display: block;
   opacity: 0.8;
   filter: blur(10px); /* Apply the blur effect */
-`
+`;
 
-export const Themes = styled.div`
-  background: rgba(0, 0, 0, 0.8);
-  border-radius: 10px;
-  box-shadow: 0 0 15px ${themes.main};
-`
-
-export const SearchBox = styled(Themes)`
-  min-width: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: auto;
-  padding: 30px;
-
-  @media ${devices.mobileM} {
-    min-width: 500px;
-  }
-`
-
-export const InputSearch = styled.input`
-  flex: 1;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  background: #1e1e1e;
-  color: ${themes.main};
-  font-size: 1rem;
-  outline: none;
-  box-shadow: 0 0 5px ${themes.main};
-
-  &::placeholder {
-    color: #666;
-  }
-`
-
-export const WrapperInput = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
-export const ButtonSearch = styled.button`
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background: ${themes.main};
-  color: #000000;
-  font-size: 1rem;
-  cursor: pointer;
-  box-shadow: 0 0 5px ${themes.main}, 0 0 10px ${themes.main};
-  transition: 0.3s ease;
-
-  &:hover {
-    background: #216e05;
-    box-shadow: 0 0 10px ${themes.main}, 0 0 20px ${themes.main};
-  }
-`
 
 const Card = styled(Flex)`
   background-color: #fff;
@@ -169,7 +111,7 @@ const Card = styled(Flex)`
   @media ${devices.laptop} {
     padding: 16px;
   }
-`
+`;
 
 const CardWrap = styled(Flex)`
   gap: 20px;
@@ -179,7 +121,7 @@ const CardWrap = styled(Flex)`
   @media ${devices.laptop} {
     flex-direction: row;
   }
-`
+`;
 
 const Logo = styled(Image)`
   border-radius: 10px;
@@ -189,7 +131,7 @@ const Logo = styled(Image)`
   height: 120px;
   width: 120px;
   min-width: max-content;
-`
+`;
 
 const SearchWrap = styled(Flex)`
   border-radius: 20px;
@@ -204,9 +146,9 @@ const SearchWrap = styled(Flex)`
   @media ${devices.laptop} {
     margin-top: 30px;
   }
-`
+`;
 
-const Input = styled.input`
+export const Input = styled.input`
   background-color: transparent;
   border: none;
   outline: none;
@@ -219,7 +161,7 @@ const Input = styled.input`
     color: #cdc7c7;
     font-weight: 400;
   }
-`
+`;
 
 const BottomDesc = styled(Flex)`
   margin-top: 10px;
@@ -227,7 +169,7 @@ const BottomDesc = styled(Flex)`
   @media ${devices.laptop} {
     margin-top: 150px;
   }
-`
+`;
 
 const bounce = keyframes`
   0%, 20%, 50%, 80%, 100% {
@@ -239,71 +181,79 @@ const bounce = keyframes`
   60% {
     transform: translateY(-5px);
   }
-`
+`;
 
 const BouncingFlex = styled.div`
   display: flex;
   align-items: center;
   margin-top: 40px;
   cursor: pointer;
-`
+`;
 
 const BouncingText = styled(Text)`
   font-size: 22px;
   color: #868686;
   animation: ${bounce} 1.5s infinite ease-in-out;
-`
+`;
 
 const BouncingIcon = styled(KeyboardDoubleArrowDownIcon)`
   color: #4d4b4b;
   animation: ${bounce} 1.5s infinite ease-in-out;
-`
+`;
 
-const IconWrap = styled(Box)`
+export const IconWrap = styled(Box)`
   transition: all 0.3s;
   cursor: pointer;
   &:hover {
     transform: scale(1.03);
   }
-`
+`;
 
 interface HeroProps {}
 
 const Hero: FC<HeroProps> = () => {
-  const [searchAddress, setSearchAddress] = useState('')
-  const router = useRouter()
-  const searchRef = useRef<HTMLInputElement>(null)
+  const [searchAddress, setSearchAddress] = useState("");
+  const { push } = useRouter();
+  const searchRef = useRef<HTMLInputElement>(null);
 
   const handleKeyDown = (e: any) => {
-    if (e.key === 'Enter' && searchAddress) {
-      handleSearch()
-    } else if (e.key === 'Enter' && searchAddress === '') {
-      handleSearch()
+    if (e.key === "Enter" && searchAddress) {
+      handleSearch();
+    } else if (e.key === "Enter" && searchAddress === "") {
+      handleSearch();
     }
-  }
+  };
 
   const handleSearch = () => {
-    const address = searchAddress.trim()
-    router.push(`/community?address=${searchAddress}`)
-    if (isAddress(address)) {
-      setSearchAddress('')
-      searchRef.current?.blur()
+    const address = searchAddress.trim();
+    if (!address) {
+      toast.error("Please enter the token address.");
     } else {
-      toast.error('Please enter the token address!')
+      if (isAddress(address)) {
+        push(`/community?address=${searchAddress}`);
+        setSearchAddress("");
+        searchRef.current?.blur();
+      } else {
+        toast.error("Please enter the correct format of the token address.");
+      }
     }
-    if (searchAddress === '') {
-      searchRef.current?.blur()
-    }
-  }
+  };
 
-  const { push } = useRouter()
+  const { data } = useCASuiAIAndTokenMainInfo([
+    ADDRESS_SUI_AI,
+    ADDRESS_TOKEN_MAIN,
+  ]);
+
+  const handleNavigateToken = (token: any) => {
+    push(`/community?address=${token?.token_address}`);
+  };
 
   return (
     <StyledHero>
       <ToastContainer />
       <HeroWrapper>
         <ContentInner className={openSans.className}>
-          <BigTitle>AI LENS</BigTitle>
+          <BigTitle>LENS AI</BigTitle>
 
           <Desc>
             Track tokens, monitor dev wallets, and discover hidden gems, all on
@@ -312,7 +262,7 @@ const Hero: FC<HeroProps> = () => {
 
           <SearchWrap>
             <Input
-              placeholder="Enter CA to see the magic..."
+              placeholder='Enter CA to see the magic...'
               onKeyDown={handleKeyDown}
               onChange={(e) => setSearchAddress(e.target.value)}
             />
@@ -322,116 +272,70 @@ const Hero: FC<HeroProps> = () => {
           </SearchWrap>
 
           <CardWrap>
-            <Card>
-              <Flex alignItems="center">
-                <Text
-                  color="#000"
-                  fontWeight={600}
-                  mr="5px"
-                  fontSize="20px"
-                >
-                  SUIAI
-                </Text>
-                <CheckCircleIcon
-                  fontSize="small"
-                  color="success"
-                />
-              </Flex>
-
-              <Text color="#868686">CA: 0xbc732bc...1f92::suai::SUAI</Text>
-
-              <Flex
-                mt="10px"
-                style={{
-                  gap: '10px',
-                }}
+            {data?.map((item) => (
+              <Card
+                key={item?.symbol}
+                onClick={() => handleNavigateToken(item)}
               >
-                <Logo
-                  alt="logo"
-                  src={suiAiImg}
-                  width={120}
-                  height={120}
-                />
+                <Flex alignItems='center'>
+                  <Text color='#000' fontWeight={600} mr='5px' fontSize='20px'>
+                    {item?.symbol}
+                  </Text>
+                  <CheckCircleIcon fontSize='small' color='success' />
+                </Flex>
+
+                <Text color='#868686'>
+                  CA: {sliceAddress(item?.token_address, 10)}
+                </Text>
 
                 <Flex
-                  flexDirection="column"
+                  mt='10px'
                   style={{
-                    gap: '8px',
+                    gap: "10px",
                   }}
                 >
-                  <Text color="#868686">
-                    Launch and Co-Create Onchain AI Agents @SuiNetwork
-                  </Text>
+                  {item?.icon_url ? (
+                    <Image
+                      src={item?.icon_url}
+                      width={120}
+                      height={120}
+                      alt='logo'
+                    />
+                  ) : (
+                    <Logo alt='logo' src={suiAiImg} />
+                  )}
 
-                  <Flex>
-                    <Text mr="5px">Created By:</Text>
-                    <Text color="#868686">0xbc732bc...1f92</Text>
-                  </Flex>
-                  <Flex>
-                    <Text mr="5px"> Marketcap:</Text>
-                    <Text color="#868686">18.5M$</Text>
-                  </Flex>
-                </Flex>
-              </Flex>
-            </Card>
+                  <Flex
+                    flexDirection='column'
+                    style={{
+                      gap: "8px",
+                    }}
+                  >
+                    <Text color='#868686'>
+                      Launch and Co-Create Onchain AI Agents @SuiNetwork
+                    </Text>
 
-            <Card>
-              <Flex alignItems="center">
-                <Text
-                  color="#000"
-                  fontWeight={600}
-                  mr="5px"
-                  fontSize="20px"
-                >
-                  SUIAI
-                </Text>
-                <CheckCircleIcon
-                  fontSize="small"
-                  color="success"
-                />
-              </Flex>
-
-              <Text color="#868686">CA: 0xbc732bc...1f92::suai::SUAI</Text>
-
-              <Flex
-                mt="10px"
-                style={{
-                  gap: '10px',
-                }}
-              >
-                <Logo
-                  alt="logo"
-                  src={suiAiImg}
-                />
-
-                <Flex
-                  flexDirection="column"
-                  style={{
-                    gap: '8px',
-                  }}
-                >
-                  <Text color="#868686">
-                    Launch and Co-Create Onchain AI Agents @SuiNetwork
-                  </Text>
-
-                  <Flex>
-                    <Text mr="5px">Created By:</Text>
-                    <Text color="#868686">0xbc732bc...1f92</Text>
-                  </Flex>
-                  <Flex>
-                    <Text mr="5px"> Marketcap:</Text>
-                    <Text color="#868686">18.5M$</Text>
+                    <Flex>
+                      <Text mr='5px'>Created By:</Text>
+                      <Text color='#868686'>{sliceAddress(item?.creator)}</Text>
+                    </Flex>
+                    <Flex>
+                      <Text mr='5px'> Marketcap:</Text>
+                      <Text color='#868686'>
+                        {formatNumber(Number(item?.marketcap))}$
+                      </Text>
+                    </Flex>
                   </Flex>
                 </Flex>
-              </Flex>
-            </Card>
+              </Card>
+            ))}
           </CardWrap>
 
           <BottomDesc>
             <Desc
               style={{
-                lineHeight: '1.4',
-                letterSpacing: '1.3',
+                lineHeight: "1.4",
+                letterSpacing: "1.3",
               }}
             >
               As a big fan of SUIAI and aim to create a platform that simplifies
@@ -444,20 +348,16 @@ const Hero: FC<HeroProps> = () => {
 
           <BouncingFlex
             onClick={() => {
-              push('/#about')
+              push("/#about");
             }}
           >
-            <BouncingText
-              mr="10px"
-              fontSize="22px"
-              color="#868686"
-            >
+            <BouncingText mr='10px' fontSize='22px' color='#868686'>
               SCROLL DOWN
             </BouncingText>
             <BouncingIcon>
               <KeyboardDoubleArrowDownIcon
                 style={{
-                  color: '#4d4b4b',
+                  color: "#4d4b4b",
                 }}
               />
             </BouncingIcon>
@@ -466,7 +366,7 @@ const Hero: FC<HeroProps> = () => {
         <Background />
       </HeroWrapper>
     </StyledHero>
-  )
-}
+  );
+};
 
-export default Hero
+export default Hero;

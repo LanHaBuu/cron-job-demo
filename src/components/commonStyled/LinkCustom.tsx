@@ -9,9 +9,6 @@ const WrapperLink = styled(Link)`
   border: none;
   text-decoration: none;
 
-  &:hover {
-    text-shadow: 0 0 5px ${themes.main}, 0 0 10px ${themes.main};
-  }
 `;
 
 interface ILinkCustom extends LinkProps {

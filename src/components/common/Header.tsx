@@ -261,7 +261,7 @@ const Header = () => {
           </Menu>
 
           <Flex>
-            <Button
+            {/* <Button
               onClick={() =>
                 window
                   .open
@@ -270,7 +270,7 @@ const Header = () => {
               }
             >
               BUY $LENS
-            </Button>
+            </Button> */}
 
             <HamberMenu>
               <HamburgerMenu

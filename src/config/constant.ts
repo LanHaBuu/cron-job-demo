@@ -7,7 +7,7 @@ export const HeroContent = {
 }
 
 export const AboutContent = {
-  title: 'What is AI LENS',
+  title: 'What is LENS AI',
   desc: [
     'AICAT is more than just a meme token — it represents unity and the power of community within the SUI ecosystem. We place the community at the heart of every decision and developmental direction.',
 
